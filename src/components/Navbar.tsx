@@ -10,12 +10,19 @@ const Navbar = () => {
       <ul className="flex justify-between m-10 item-center">
         <div>
           <Link href="/">
-            <li>Home</li>
+            <li>LOGO</li>
           </Link>
         </div>
         <div className="flex gap-10">
-          <Link href="/dashboard">
-            <li>Dashboard</li>
+          <Link href="/">
+            <li>Home</li>
+          </Link>
+          <Link href="/hackathons">
+            <li>Hackathons</li>
+          </Link>
+          <Link href="/">
+            <li>Search</li>
+            {/* need to add input */}
           </Link>
           {!session ? (
             <>
@@ -26,6 +33,9 @@ const Navbar = () => {
           ) : (
             <>
               {session.user?.email}
+              <Link href="/">
+                <li>Profile</li>
+              </Link>
               <li>
                 <button
                   onClick={() => {

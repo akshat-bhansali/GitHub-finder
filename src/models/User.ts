@@ -29,6 +29,13 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    tags: [{
+      type: String,
+    }],
+    role:{
+      type: String,
+      default : "user"
+    }
   },
   { timestamps: true }
 );
