@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 
 const Login = () => {
   const router = useRouter();
-  const [error, setError] = useState("");
   // const session = useSession();
   const { data: session, status: sessionStatus } = useSession();
 

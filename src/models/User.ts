@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Hackathon from "./Hackathon";
 
 const { Schema } = mongoose;
 
@@ -35,7 +36,11 @@ const userSchema = new Schema(
     role:{
       type: String,
       default : "user"
-    }
+    },
+    hackathon: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Hackathon' 
+    }]
   },
   { timestamps: true }
 );

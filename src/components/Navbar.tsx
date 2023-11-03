@@ -32,7 +32,6 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              {session.user?.email}
               <Link href="/">
                 <li>Profile</li>
               </Link>

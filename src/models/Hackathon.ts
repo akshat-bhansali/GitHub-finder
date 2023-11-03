@@ -16,9 +16,11 @@ const hackathonSchema = new Schema(
     description: {
       type: String,
     },
-    user : [{
-        type:User,
-    }]
+    
+  user: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }]
   },
   { timestamps: true }
 );
