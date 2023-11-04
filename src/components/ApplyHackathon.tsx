@@ -4,24 +4,20 @@ import { useRouter } from "next/navigation";
 const ApplyHackathon = ({ id, userEmail }: any) => {
   const router = useRouter();
   const addUsertoHackathon = async () => {
-    const confirmed = confirm("Are you sure?");
-
     try {
-      if (confirmed) {
-        const res = await fetch(
-          `http://localhost:3000/api/addUsertoHackathon`,
-          {
-            method: "PUT",
-            body: JSON.stringify({ userEmail, id }),
+          const res = await fetch(
+            `http://localhost:3000/api/addUsertoHackathon`,
+            {
+              method: "PUT",
+              body: JSON.stringify({ userEmail, id }),
+            }
+          );
+            
+          if (res.ok) {
+            router.push("/login");
+          } else {
+            throw new Error("Failed to add");
           }
-        );
-
-        if (res.ok) {
-          router.push("/");
-        } else {
-          throw new Error("Failed to add");
-        }
-      }
     } catch (error) {
       console.log(error);
     }
