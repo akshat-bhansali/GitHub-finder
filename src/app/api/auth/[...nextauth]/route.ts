@@ -29,7 +29,6 @@ export const authOptions: any = {
       if (account?.provider == "github") {
         await connect();
         try {
-          // console.log(profile);
           const existingUser = await User.findOne({ email: user.email });
           console.log(existingUser);
           if (!existingUser) {

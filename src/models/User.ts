@@ -38,8 +38,7 @@ const userSchema = new Schema(
       default : "user"
     },
     hackathon: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Hackathon' 
+      type: String,
     }]
   },
   { timestamps: true }
