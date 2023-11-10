@@ -40,7 +40,7 @@ export const authOptions: any = {
               repo: profile.repos_url,
               name: profile.name,
             });
-
+            
             await newUser.save();
             return true;
           }

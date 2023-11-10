@@ -34,7 +34,7 @@ const getData = async () => {
   }
 };
 
-const page = () => {
+const Page = () => {
   const convertDate = (inputDate: any) => {
     const date = new Date(inputDate);
     const day = date.getUTCDate().toString().padStart(2, "0");
@@ -157,4 +157,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

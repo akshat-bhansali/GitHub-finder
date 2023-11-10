@@ -39,6 +39,7 @@ const userSchema = new Schema(
     },
     hackathon: [{
       type: String,
+      ref: 'Hackathon'
     }]
   },
   { timestamps: true }
