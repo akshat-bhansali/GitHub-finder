@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import Hackathon from "@/models/Hackathon";
 
 const getCurrentUser = async (email: any) => {
   try {
@@ -70,8 +71,12 @@ const Page = () => {
             <p className="m-4">Link: {currentUser?.["link"]}</p>
             <p className="m-4">Repo: {currentUser?.["repo"]}</p>
             
-            <p className="m-4">Hackathons:
-            </p>
+            <p className="m-4">Hackathons:</p>
+            <ul>
+              {currentUser?.hackathon?.map((h:any,id:any)=>{
+                return(<li>{h}</li>)
+              })}
+            </ul>
           </div>
         
       </div>

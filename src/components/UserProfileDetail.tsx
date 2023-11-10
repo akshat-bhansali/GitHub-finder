@@ -1,17 +1,17 @@
-// components/UserProfileDetails.js
+
 import React from 'react';
 
 const UserProfileDetails = ({
-  profilePicture : any,
-  username : any ,
-  email : any,
-  repositories : any,
-  name : any,
-  link : any,
-  creationDate : any,
-  updationDate : any,
-  role : any,
-}) => {
+  profilePicture , 
+  username ,
+  email , 
+  repositories , 
+  name , 
+  link , 
+  creationDate , 
+  updationDate , 
+  role 
+}:any) => {
   return (
     <div>
       <div>
@@ -22,7 +22,7 @@ const UserProfileDetails = ({
       <div>
         <h3>Repositories:</h3>
         <ul>
-          {repositories.map((repo, index) => (
+          {repositories.map((repo :any, index : any) => (
             <li key={index}>{repo.detail}</li>
           ))}
         </ul>

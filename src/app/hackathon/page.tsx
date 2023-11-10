@@ -5,6 +5,7 @@ import AddHackathon from "@/components/AddHackathon";
 import { useRouter } from "next/navigation";
 import RemoveHackathon from "@/components/RemoveHackathon";
 import ApplyHackathon from "@/components/ApplyHackathon";
+import Link from "next/link";
 
 const getCurrentUser = async (email: any) => {
   try {
@@ -50,8 +51,12 @@ const Page = () => {
   const [currentUser, setCurrentUser] = useState();
   // const [reg, setReg] = useState(false);
   let reg = false;
-  const getReg = ()=>{return reg;}
-  const setReg = (change:any)=>{reg=change}
+  const getReg = () => {
+    return reg;
+  };
+  const setReg = (change: any) => {
+    reg = change;
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -132,14 +137,24 @@ const Page = () => {
                         </div>
                       );
                     })} */}
-                    {currentUser?.["hackathon"].map((h:any, index:any) => {
-                      h === hackathon?.['_id'] ? setReg(true) :null
+                    {currentUser?.["hackathon"].map((h: any, index: any) => {
+                      h === hackathon?.["_id"] ? setReg(true) : null;
                     })}
-                    {getReg() ? <div>view</div> : 
-                    <ApplyHackathon
-                      id={`${hackathon?.["_id"]}`}
-                      userEmail={`${session?.user?.email}`}
-                    />}
+                    {getReg() ? (
+                      <button
+                        onClick={() => {
+
+                          router.push(`/hackathon/${hackathon?.["_id"]}`);
+                        }}
+                      >
+                        View
+                      </button>
+                    ) : (
+                      <ApplyHackathon
+                        id={`${hackathon?.["_id"]}`}
+                        userEmail={`${session?.user?.email}`}
+                      />
+                    )}
                     {setReg(false)}
                     {currentUser?.["role"] === "admin" ? (
                       <RemoveHackathon id={`${hackathon?.["_id"]}`} />
