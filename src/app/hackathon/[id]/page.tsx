@@ -1,8 +1,10 @@
 "use client";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const page = () => {
+  const router = useRouter()
   const pathname = usePathname();
   const pathParts = pathname.split("/");
   const id = pathParts[pathParts.length - 1];
@@ -39,12 +41,14 @@ const page = () => {
       <div>dealine : {new Date(hackathon?.["deadline"]).toDateString()}</div>
       <div>description : {hackathon?.["description"]}</div>
       <div>users :</div>
-      <ul>
+      <div>
         {hackathon?.user?.map((u: any, index: any) => {
           console.log(u);
-          return <li>{u}</li>;
+          return <button onClick={()=>{
+            router.push(`/profile/${u}`)
+          }}>{u}</button>;
         })}
-      </ul>
+      </div>
     </div>
   );
 };

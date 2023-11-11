@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import Hackathon from "@/models/Hackathon";
+import { usePathname } from "next/navigation";
 
 const getCurrentUser = async (email: any) => {
   try {
@@ -20,9 +21,11 @@ const getCurrentUser = async (email: any) => {
 
 
 const Page = () => {
-  const { data: session }: any = useSession();
+  const pathname = usePathname();
+  const pathParts = pathname.split("/");
+  const email = pathParts[pathParts.length - 1];
 
-  const [currentUser, setCurrentUser] = useState();
+  const [user, setUser] = useState();
   // useEffect(() => {
   //   const fetchData = async () => {
   //     try {
@@ -41,39 +44,36 @@ const Page = () => {
   useEffect(() => {
     const fetchCurrentUserData = async () => {
       try {
-        const data = await getCurrentUser(session?.user.email);
+        const data = await getCurrentUser(email);
         if (data) {
-          setCurrentUser(data.currentUser);
+          setUser(data.currentUser);
         }
       } catch (error) {
         console.error("Error fetching current user data: ", error);
       }
     };
-
-    if (session?.user?.email) {
       fetchCurrentUserData();
-    }
-  }, [session?.user?.email]);
+  }, []);
   return (
     <div className="flex justify-evenly align-middle p-10">
       <div>
           <img
-            src={currentUser?.["avatar"]} 
+            src={user?.["avatar"]} 
             alt="Profile Picture"
             className="rounded-full h-30 w-30"
           />
-          <p className="ml-10 mt-6 text-3xl">{currentUser?.["name"]}</p>
+          <p className="ml-10 mt-6 text-3xl">{user?.["name"]}</p>
           </div>
           <div>
             
-            <p className="m-4">Email: {currentUser?.["email"]}</p>
-            <p className="m-4">Username: {currentUser?.["username"]}</p>
-            <p className="m-4">Link: {currentUser?.["link"]}</p>
-            <p className="m-4">Repo: {currentUser?.["repo"]}</p>
+            <p className="m-4">Email: {user?.["email"]}</p>
+            <p className="m-4">Username: {user?.["username"]}</p>
+            <p className="m-4">Link: {user?.["link"]}</p>
+            <p className="m-4">Repo: {user?.["repo"]}</p>
             
             <p className="m-4">Hackathons:</p>
             <ul>
-              {currentUser?.hackathon?.map((h:any,id:any)=>{
+              {user?.hackathon?.map((h:any,id:any)=>{
                 return(<li>{h}</li>)
               })}
             </ul>
