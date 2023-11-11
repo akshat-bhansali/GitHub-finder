@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import RemoveHackathon from "@/components/RemoveHackathon";
 import ApplyHackathon from "@/components/ApplyHackathon";
 import Link from "next/link";
+import ViewHackathon from "@/components/ViewHackathon";
 
 const getCurrentUser = async (email: any) => {
   try {
@@ -78,8 +79,6 @@ const Page = () => {
         const data = await getCurrentUser(session?.user.email);
         if (data) {
           setCurrentUser(data.currentUser);
-          // console.log(data.currentUser);
-          // console.log(currentUser);
         }
       } catch (error) {
         console.error("Error fetching current user data: ", error);
@@ -125,30 +124,11 @@ const Page = () => {
                 </td>
                 <td className="border px-4 py-2">
                   <div className="flex flex-row">
-                    {/* {hackathon?.["user"].map((email: string, id: number) => {
-                      return (
-                        <div key={id}>
-                          {email === session?.user?.email && (
-                            <ApplyHackathon
-                              id={`${hackathon?.["_id"]}`}
-                              userEmail={`${session?.user?.email}`}
-                            />
-                          )}
-                        </div>
-                      );
-                    })} */}
                     {currentUser?.["hackathon"].map((h: any, index: any) => {
                       h === hackathon?.["_id"] ? setReg(true) : null;
                     })}
                     {getReg() ? (
-                      <button
-                        onClick={() => {
-
-                          router.push(`/hackathon/${hackathon?.["_id"]}`);
-                        }}
-                      >
-                        View
-                      </button>
+                      null
                     ) : (
                       <ApplyHackathon
                         id={`${hackathon?.["_id"]}`}
@@ -161,6 +141,7 @@ const Page = () => {
                     ) : (
                       <></>
                     )}
+                    <ViewHackathon hackathon={hackathon}/>
                   </div>
                 </td>
               </tr>
