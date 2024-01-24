@@ -4,7 +4,7 @@ import GithubProvider from "next-auth/providers/github";
 import User from "@/models/User";
 import connect from "@/utils/db";
 
-export const authOptions: any = {
+ const authOptions: any = {
   // Configure one or more authentication providers
   providers: [
     GithubProvider({
