@@ -124,7 +124,7 @@ const Page = () => {
                 </td>
                 <td className="border px-4 py-2">
                   <div className="flex flex-row">
-                    {currentUser?.["hackathon"].map((h: any, index: any) => {
+                    {(currentUser?.["hackathon"] as any).map((h: any, index: any) => {
                       h === hackathon?.["_id"] ? setReg(true) : null;
                     })}
                     {getReg() ? (

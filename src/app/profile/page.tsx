@@ -73,7 +73,7 @@ const Page = () => {
             
             <p className="m-4">Hackathons:</p>
             <ul>
-              {currentUser?.hackathon?.map((h:any,id:any)=>{
+              {(currentUser?.['hackathon'] as any).map((h:any,id:any)=>{
                 return(<li>{h}</li>)
               })}
             </ul>
