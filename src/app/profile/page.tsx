@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import Hackathon from "@/models/Hackathon";
+import { useRouter } from "next/navigation";
 
 const getCurrentUser = async (email: any) => {
   try {
@@ -21,7 +22,7 @@ const getCurrentUser = async (email: any) => {
 
 const Page = () => {
   const { data: session }: any = useSession();
-
+  const router = useRouter()
   const [currentUser, setCurrentUser] = useState();
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -73,12 +74,13 @@ const Page = () => {
             
             <p className="m-4">Hackathons:</p>
             <ul>
-              {(currentUser?.['hackathon'] as any).map((h:any,id:any)=>{
-                return(<li>{h}</li>)
+              {currentUser?.hackathon?.map((h:any,id:any)=>{
+                return(<button onClick={()=>{
+                  router.push(`/hackathon/${h}`)
+                }}>{h}</button>)
               })}
             </ul>
           </div>
-        
       </div>
   );
 };

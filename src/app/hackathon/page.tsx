@@ -92,25 +92,25 @@ const Page = () => {
   return (
     <div>
       <div>{currentUser?.["role"] === "admin" ? <AddHackathon /> : <></>}</div>
-      <div className="overflow-x-auto">
-        <table className="table-auto min-w-full">
-          <thead>
+      <div className="shadow-md rounded-md p-4">
+        <table className="min-w-full overflow-x-auto">
+        <thead className="uppercase bg-gray-50 dark:bg-gray-700 text-gray-100">
             <tr>
-              <th className="px-4 py-2">Name</th>
-              <th className="px-4 py-2">Deadline</th>
-              <th className="px-4 py-2">Link</th>
-              <th className="px-4 py-2">Description</th>
-              <th className="px-4 py-2">Apply</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">Hackathon Name</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">Deadline</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">Link</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">Description</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">Apply</th>
             </tr>
           </thead>
           <tbody>
-            {hackathons.map((hackathon, index) => (
+            {hackathons?.map((hackathon, index) => (
               <tr key={index}>
-                <td className="border px-4 py-2">{hackathon?.["name"]}</td>
-                <td className="border px-4 py-2">
+                <td className="py-2 px-3 text-sm">{hackathon?.["name"]}</td>
+                <td className="py-2 px-3 text-sm">
                   {convertDate(hackathon?.["deadline"])}
                 </td>
-                <td className="border px-4 py-2">
+                <td className="py-2 px-3 text-sm">
                   <a
                     href={hackathon?.["link"]}
                     target="_blank"
@@ -119,10 +119,10 @@ const Page = () => {
                     Website
                   </a>
                 </td>
-                <td className="border px-4 py-2">
+                <td className="py-2 px-3 text-sm">
                   {hackathon?.["description"]}
                 </td>
-                <td className="border px-4 py-2">
+                <td className="py-2 px-3 text-sm">
                   <div className="flex flex-row">
                     {(currentUser?.["hackathon"] as any).map((h: any, index: any) => {
                       h === hackathon?.["_id"] ? setReg(true) : null;
