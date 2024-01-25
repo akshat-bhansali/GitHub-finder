@@ -75,7 +75,7 @@ const Page = () => {
             
             <p className="m-4">Hackathons:</p>
             <ul>
-              {user?.hackathon?.map((h:any,id:any)=>{
+              {(user as any)?.hackathon?.map((h:any,id:any)=>{
                 return(<button onClick={()=>{
                   router.push(`/hackathon/${h}`)
                 }}>{h}</button>)

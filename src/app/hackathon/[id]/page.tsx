@@ -42,7 +42,7 @@ const page = () => {
       <div>description : {hackathon?.["description"]}</div>
       <div>users :</div>
       <div>
-        {hackathon?.['user'].map((u: any, index: any) => {
+        {(hackathon as any)?.user.map((u: any, index: any) => {
           return <button onClick={()=>{
             router.push(`/profile/${u}`)
           }}>{u}</button>;
