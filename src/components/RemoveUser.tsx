@@ -1,16 +1,14 @@
 "use client";
 import { NextApiRequest, NextApiResponse } from "next";
-import connectDB from "@/utils/db";
+import connect from "@/utils/db";
 import User from "@/models/User";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    await connectDB();
+    await connect();
     
     if (req.method === "DELETE") {
       const { userId, hackathonId } = req.query;
-
-      // Remove the hackathonId from the user
       await User.findByIdAndUpdate(
         userId,
         { $pull: { hackathon: hackathonId } },
