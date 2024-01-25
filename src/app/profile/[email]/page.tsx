@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import Hackathon from "@/models/Hackathon";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const getCurrentUser = async (email: any) => {
   try {
@@ -21,6 +22,7 @@ const getCurrentUser = async (email: any) => {
 
 
 const Page = () => {
+  const router = useRouter()
   const pathname = usePathname();
   const pathParts = pathname.split("/");
   const email = pathParts[pathParts.length - 1];
@@ -74,7 +76,9 @@ const Page = () => {
             <p className="m-4">Hackathons:</p>
             <ul>
               {user?.hackathon?.map((h:any,id:any)=>{
-                return(<li>{h}</li>)
+                return(<button onClick={()=>{
+                  router.push(`/hackathon/${h}`)
+                }}>{h}</button>)
               })}
             </ul>
           </div>
