@@ -38,12 +38,11 @@ const page = () => {
       <p>Hackathon Data :</p>
       <div>name : {hackathon?.["name"]}</div>
       <div>link : {hackathon?.["link"]}</div>
-      <div>dealine : {new Date(hackathon?.["deadline"]).toDateString()}</div>
+      <div>dealine : {new Date(hackathon?.["deadline"]!).toDateString()}</div>
       <div>description : {hackathon?.["description"]}</div>
       <div>users :</div>
       <div>
-        {hackathon?.user?.map((u: any, index: any) => {
-          console.log(u);
+        {(hackathon?.['user'] as any).map((u: any, index: any) => {
           return <button onClick={()=>{
             router.push(`/profile/${u}`)
           }}>{u}</button>;
