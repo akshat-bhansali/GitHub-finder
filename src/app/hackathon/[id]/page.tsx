@@ -11,7 +11,7 @@ const page = () => {
   const [hackathon, setHackathon] = useState();
   const getData = async () => {
     try {
-      const res = await fetch(`http://localhost:3000/api/getHackathon/${id}`);
+      const res = await fetch(`/api/getHackathon/${id}`);
       if (!res.ok) {
         throw new Error("Failed to fetch hackathons");
       }

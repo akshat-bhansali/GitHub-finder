@@ -11,7 +11,7 @@ import ViewHackathon from "@/components/ViewHackathon";
 const getCurrentUser = async (email: any) => {
   try {
     const res = await fetch(
-      `http://localhost:3000/api/getCurrentUser?userEmail=${email}`
+      `/api/getCurrentUser?userEmail=${email}`
     );
     if (!res.ok) {
       throw new Error("Failed to fetch hackathons");
@@ -25,7 +25,7 @@ const getCurrentUser = async (email: any) => {
 
 const getData = async () => {
   try {
-    const res = await fetch("http://localhost:3000/api/getHackathon");
+    const res = await fetch("/api/getHackathon");
     if (!res.ok) {
       throw new Error("Failed to fetch hackathons");
     }

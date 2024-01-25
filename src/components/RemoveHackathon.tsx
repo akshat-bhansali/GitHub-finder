@@ -7,7 +7,7 @@ const RemoveHackathon = ({id}:any) => {
     const confirmed = confirm("Are you sure?");
 
     if (confirmed) {
-      const res = await fetch(`http://localhost:3000/api/deleteHackathon?id=${id}`, {
+      const res = await fetch(`/api/deleteHackathon?id=${id}`, {
         method: "DELETE",
       });
 

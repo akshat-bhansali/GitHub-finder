@@ -14,7 +14,7 @@ const AddHackathon = () => {
     // Perform actions with the form data, for example, send it to an API or perform other operations
     // console.log('Form submitted:', formData);
     try {
-      const res = await fetch("http://localhost:3000/api/addHackathon", {
+      const res = await fetch("/api/addHackathon", {
         method: "POST",
         headers: {
           "Content-type": "application/json",

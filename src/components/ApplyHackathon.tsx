@@ -6,7 +6,7 @@ const ApplyHackathon = ({ id, userEmail }: any) => {
   const addUsertoHackathon = async () => {
     try {
           const res = await fetch(
-            `http://localhost:3000/api/addUsertoHackathon`,
+            `/api/addUsertoHackathon`,
             {
               method: "PUT",
               body: JSON.stringify({ userEmail, id }),
