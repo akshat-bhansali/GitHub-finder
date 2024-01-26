@@ -51,6 +51,12 @@ import connect from "@/utils/db";
         }
       }
     },
+    async redirect(url: string, baseUrl: string) {
+      return url.startsWith(baseUrl)
+        ? url
+        : baseUrl // Make sure it's an absolute URL
+    },
+    
   },
 };
 
