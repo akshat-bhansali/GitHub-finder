@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import Hackathon from "@/models/Hackathon";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { Dropdown } from 'flowbite-react';
 
 const getCurrentUser = async (email: any) => {
   try {
@@ -28,6 +29,8 @@ const Page = () => {
   const [pages, setPages] = useState(0);
   const [repoNumber, setRepoNumber] = useState(1);
   const [repoShown, setRepoShown] = useState([]);
+  const [userTags,setUserTags] = useState<any>([]);
+  const [isButtonDisabled, setButtonDisabled] = useState(true);
   // Function to calculate and format time difference
   const formatTimeDifference = (updated_at: string | number | Date) => {
     const currentTime = new Date();
@@ -60,6 +63,7 @@ const Page = () => {
         if (data) {
           setCurrentUser(data.currentUser);
           url = data.currentUser?.repo;
+          setUserTags(data.currentUser?.tags)
           fetchRepoData();
         }
       } catch (error) {
@@ -93,6 +97,33 @@ const Page = () => {
     }
     setRepoShown(tempArray);
   }, [repoNumber, pages]);
+  const removeTag = (tagToRemove: any) => {
+    const updatedTags = userTags.filter((tag: any) => tag !== tagToRemove);
+    setUserTags(updatedTags);
+    setButtonDisabled(false);
+  };
+  const addTag = (tagToAdd : any) => {
+    if(userTags.length!=2){
+      if(!userTags.includes(tagToAdd)){
+        setUserTags([...userTags, tagToAdd]);
+        setButtonDisabled(false);
+       } else {
+        alert("Tag already present");
+       }
+    } else{
+      alert("Only 2 tags are allowed");
+    }
+  };
+  const handleUpdateTags = async () => {
+    try {
+      const response = await axios.put(`/api/updateTags?userEmail=${(currentUser as any)?.email}`,  userTags );
+      console.log('Tags updated successfully',response);
+      setButtonDisabled(true)
+    } catch (error) {
+      console.error('Error updating tags:', error);
+    }
+  };
+
   return (
     <>
       <div className="flex justify-evenly align-middle p-10">
@@ -124,6 +155,23 @@ const Page = () => {
               );
             })}
           </ul>
+          <Dropdown label="Dropdown button" dismissOnClick={false} >
+            <Dropdown.Item className="bg-white" onClick={()=>{addTag("Frontend")}}>Frontend</Dropdown.Item>
+            <Dropdown.Item className="bg-white" onClick={()=>{addTag("Backend")}}>Backend</Dropdown.Item>
+            <Dropdown.Item className="bg-white" onClick={()=>{addTag("Full Stack")}}>Full Stack</Dropdown.Item>
+            <Dropdown.Item className="bg-white" onClick={()=>{addTag("Blockchain")}}>Blockchain</Dropdown.Item>
+            <Dropdown.Item className="bg-white" onClick={()=>{addTag("AI & ML")}}>AI & ML</Dropdown.Item>
+          </Dropdown>
+          <div className="flex flex-col">
+              {
+                userTags.map((u:any,i:any)=>{
+                  return(<button onClick={()=>{removeTag(u)}}>{u}</button>)
+                })
+              }
+          </div>
+          <button disabled={isButtonDisabled} onClick={()=>{handleUpdateTags()}} className={`${isButtonDisabled?"bg-red-900":"bg-blue-900"} border`}>
+            SAVE
+          </button>
         </div>
       </div>
       <div className="flex flex-col">
