@@ -31,6 +31,7 @@ const Page = () => {
   const [pages, setPages] = useState(0);
   const [repoNumber, setRepoNumber] = useState(1);
   const [repoShown, setRepoShown] = useState([]);
+  const [userTags,setUserTags] = useState<any>([]);
 
   const [user, setUser] = useState();
   const formatTimeDifference = (updated_at: string | number | Date) => {
@@ -86,6 +87,7 @@ const Page = () => {
         if (data) {
           setUser(data.currentUser);
           url = data.currentUser?.repo;
+          setUserTags(data.currentUser?.tags)
           fetchRepoData();
         }
       } catch (error) {
@@ -109,7 +111,6 @@ const Page = () => {
           <p className="m-4">Email: {user?.["email"]}</p>
           <p className="m-4">Username: {user?.["username"]}</p>
           <p className="m-4">Link: {user?.["link"]}</p>
-          <p className="m-4">Repo: {user?.["repo"]}</p>
           <p className="m-4">Hackathons:</p>
           <ul>
             {(user as any)?.hackathon?.map((h: any, id: any) => {
@@ -124,6 +125,13 @@ const Page = () => {
               );
             })}
           </ul>
+          <div className="flex flex-col">
+              {
+                userTags.map((u:any,i:any)=>{
+                  return(<div>{u}</div>)
+                })
+              }
+          </div>
         </div>
       </div>
       <div className="flex flex-col">

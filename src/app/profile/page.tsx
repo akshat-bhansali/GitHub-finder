@@ -139,8 +139,6 @@ const Page = () => {
           <p className="m-4">Email: {currentUser?.["email"]}</p>
           <p className="m-4">Username: {currentUser?.["username"]}</p>
           <p className="m-4">Link: {currentUser?.["link"]}</p>
-          <p className="m-4">Repo: {currentUser?.["repo"]}</p>
-
           <p className="m-4">Hackathons:</p>
           <ul>
             {(currentUser as any)?.hackathon?.map((h: any, id: any) => {
