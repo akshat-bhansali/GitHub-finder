@@ -41,7 +41,7 @@ const page = () => {
       <div>dealine : {new Date(hackathon?.["deadline"]!).toDateString()}</div>
       <div>description : {hackathon?.["description"]}</div>
       <div>users :</div>
-      <div>
+      <div className="flex flex-col">
         {(hackathon as any)?.user.map((u: any, index: any) => {
           return <button onClick={()=>{
             router.push(`/profile/${u}`)

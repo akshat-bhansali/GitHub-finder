@@ -16,7 +16,7 @@ export async function PUT(request:any) {
     return NextResponse.json({ message: "Hackathon not found" });
   }
   user.hackathon.push(id);
-  hackathon.user.push(userEmail);
+  hackathon.user.push(user?.username);
   user.save();
   hackathon.save();
   return NextResponse.json({ message: "Added" }, { status: 201 });

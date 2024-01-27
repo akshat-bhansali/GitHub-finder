@@ -9,12 +9,12 @@ import axios from "axios";
 const getCurrentUser = async (email: any) => {
   try {
     const res = await fetch(
-      `/api/getCurrentUser?userEmail=${email}`
+      `/api/getCurrentUserByName?username=${email}`
     );
     if (!res.ok) {
       throw new Error("Failed to fetch hackathons");
     }
-
+    console.log(res)
     return res.json();
   } catch (error) {
     console.log("Error loading hackathons: ", error);
