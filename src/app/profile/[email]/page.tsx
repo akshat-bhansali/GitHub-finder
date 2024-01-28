@@ -8,22 +8,19 @@ import axios from "axios";
 
 const getCurrentUser = async (email: any) => {
   try {
-    const res = await fetch(
-      `/api/getCurrentUserByName?username=${email}`
-    );
+    const res = await fetch(`/api/getCurrentUserByName?username=${email}`);
     if (!res.ok) {
       throw new Error("Failed to fetch hackathons");
     }
-    console.log(res)
+    console.log(res);
     return res.json();
   } catch (error) {
     console.log("Error loading hackathons: ", error);
   }
 };
 
-
 const Page = () => {
-  const router = useRouter()
+  const router = useRouter();
   const pathname = usePathname();
   const pathParts = pathname.split("/");
   const email = pathParts[pathParts.length - 1];
@@ -31,8 +28,8 @@ const Page = () => {
   const [pages, setPages] = useState(0);
   const [repoNumber, setRepoNumber] = useState(1);
   const [repoShown, setRepoShown] = useState([]);
-  const [userTags,setUserTags] = useState<any>([]);
-
+  const [userTags, setUserTags] = useState<any>([]);
+  const [userHackathons, setUserHackathons] = useState([]);
   const [user, setUser] = useState();
   const formatTimeDifference = (updated_at: string | number | Date) => {
     const currentTime = new Date();
@@ -56,6 +53,22 @@ const Page = () => {
       return `${days} days ago`;
     }
   };
+  const convertDate = (inputDate: any) => {
+    const date = new Date(inputDate);
+    const day = date.getUTCDate().toString().padStart(2, "0");
+    const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
+    const year = date.getUTCFullYear().toString();
+
+    return day + "/" + month + "/" + year;
+  };
+  const getUserHackathons = async (arr: any) => {
+    try {
+      const res = await axios.post(`/api/fetchHackathonById`, arr);
+      setUserHackathons(res.data.hackathons);
+    } catch (error) {
+      console.log("Error loading hackathons: ", error);
+    }
+  };
   useEffect(() => {
     let tempArray: SetStateAction<never[]> = [];
     for (let i = 9 * (repoNumber - 1); i < 9 * repoNumber; i++) {
@@ -66,7 +79,7 @@ const Page = () => {
     setRepoShown(tempArray);
   }, [repoNumber, pages]);
   useEffect(() => {
-    let url ="";
+    let url = "";
     const fetchRepoData = async () => {
       try {
         const res = await axios.get(String(url));
@@ -87,14 +100,15 @@ const Page = () => {
         if (data) {
           setUser(data.currentUser);
           url = data.currentUser?.repo;
-          setUserTags(data.currentUser?.tags)
+          setUserTags(data.currentUser?.tags);
           fetchRepoData();
+          getUserHackathons(data.currentUser?.hackathon);
         }
       } catch (error) {
         console.error("Error fetching current user data: ", error);
       }
     };
-      fetchCurrentUserData();
+    fetchCurrentUserData();
   }, []);
   return (
     <>
@@ -111,29 +125,117 @@ const Page = () => {
           <p className="m-4">Email: {user?.["email"]}</p>
           <p className="m-4">Username: {user?.["username"]}</p>
           <p className="m-4">Link: {user?.["link"]}</p>
-          <p className="m-4">Hackathons:</p>
-          <ul>
-            {(user as any)?.hackathon?.map((h: any, id: any) => {
-              return (
-                <button
-                  onClick={() => {
-                    router.push(`/hackathon/${h}`);
-                  }}
-                >
-                  {h}
-                </button>
-              );
-            })}
-          </ul>
           <div className="flex flex-col">
-              {
-                userTags.map((u:any,i:any)=>{
-                  return(<div>{u}</div>)
-                })
-              }
+            {userTags.map((u: any, i: any) => {
+              return <div>{u}</div>;
+            })}
           </div>
         </div>
       </div>
+      Ongoing
+      <table className="min-w-full overflow-x-auto">
+        <thead className="uppercase bg-gray-50 dark:bg-gray-700 text-gray-100">
+          <tr>
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+              Hackathon Name
+            </th>
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+              Deadline
+            </th>
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+              Link
+            </th>
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+              Description
+            </th>
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+              Apply
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {userHackathons?.map((hackathon: any, index: any) => (
+            new Date(hackathon.deadline)>new Date() && <tr key={index}>
+              <td className="py-2 px-3 text-sm">{hackathon.name}</td>
+              <td className="py-2 px-3 text-sm">
+                {convertDate(hackathon.deadline)}
+              </td>
+              <td className="py-2 px-3 text-sm">
+                <a
+                  href={hackathon.link}
+                  target="_blank"
+                  className="text-blue-500"
+                >
+                  Website
+                </a>
+              </td>
+              <td className="py-2 px-3 text-sm">{hackathon.description}</td>
+              <td className="py-2 px-3 text-sm">
+                <button
+                  onClick={() => {
+                    router.push(`/hackathon/${hackathon._id}`);
+                  }}
+                  className="bg-blue-900 rounded"
+                >
+                  Visit
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      Closed
+      <table className="min-w-full overflow-x-auto">
+        <thead className="uppercase bg-gray-50 dark:bg-gray-700 text-gray-100">
+          <tr>
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+              Hackathon Name
+            </th>
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+              Deadline
+            </th>
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+              Link
+            </th>
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+              Description
+            </th>
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+              Apply
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {userHackathons?.map((hackathon: any, index: any) => (
+            new Date(hackathon.deadline)<new Date() && <tr key={index}>
+              <td className="py-2 px-3 text-sm">{hackathon.name}</td>
+              <td className="py-2 px-3 text-sm">
+                {convertDate(hackathon.deadline)}
+              </td>
+              <td className="py-2 px-3 text-sm">
+                <a
+                  href={hackathon.link}
+                  target="_blank"
+                  className="text-blue-500"
+                >
+                  Website
+                </a>
+              </td>
+              <td className="py-2 px-3 text-sm">{hackathon.description}</td>
+              <td className="py-2 px-3 text-sm">
+                <button
+                  onClick={() => {
+                    router.push(`/hackathon/${hackathon._id}`);
+                  }}
+                  className="bg-blue-900 rounded"
+                >
+                  Visit
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
       <div className="flex flex-col">
         <div className="flex flex-row">
           {Array.from({ length: pages }, (_, index) => index + 1).map(

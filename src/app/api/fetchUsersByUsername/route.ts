@@ -9,7 +9,6 @@ export async function POST(request: any) {
   if (!usernames || !usernames.length) {
     return NextResponse.json("No usernames provided in the request body");
   }
-  console.log(usernames)
   try {
     const users = await User.find({ username: { $in: usernames } });
 
