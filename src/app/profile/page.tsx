@@ -153,23 +153,25 @@ const Page = () => {
               );
             })}
           </ul>
-          <Dropdown label="Dropdown button" dismissOnClick={false} >
+          <div className="flex flex-row gap-5">
+          <Dropdown label="Tags" dismissOnClick={false} >
             <Dropdown.Item className="bg-white" onClick={()=>{addTag("Frontend")}}>Frontend</Dropdown.Item>
             <Dropdown.Item className="bg-white" onClick={()=>{addTag("Backend")}}>Backend</Dropdown.Item>
             <Dropdown.Item className="bg-white" onClick={()=>{addTag("Full Stack")}}>Full Stack</Dropdown.Item>
             <Dropdown.Item className="bg-white" onClick={()=>{addTag("Blockchain")}}>Blockchain</Dropdown.Item>
             <Dropdown.Item className="bg-white" onClick={()=>{addTag("AI & ML")}}>AI & ML</Dropdown.Item>
           </Dropdown>
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-3">
               {
                 userTags.map((u:any,i:any)=>{
-                  return(<button onClick={()=>{removeTag(u)}}>{u}</button>)
+                  return(<button onClick={()=>{removeTag(u)}} className="bg-red-900 w-fit rounded border">{u} X</button>)
                 })
               }
           </div>
           <button disabled={isButtonDisabled} onClick={()=>{handleUpdateTags()}} className={`${isButtonDisabled?"bg-red-900":"bg-blue-900"} border`}>
             SAVE
           </button>
+          </div>
         </div>
       </div>
       <div className="flex flex-col">
