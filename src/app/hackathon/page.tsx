@@ -10,9 +10,7 @@ import ViewHackathon from "@/components/ViewHackathon";
 
 const getCurrentUser = async (email: any) => {
   try {
-    const res = await fetch(
-      `/api/getCurrentUser?userEmail=${email}`
-    );
+    const res = await fetch(`/api/getCurrentUser?userEmail=${email}`);
     if (!res.ok) {
       throw new Error("Failed to fetch hackathons");
     }
@@ -92,116 +90,150 @@ const Page = () => {
   return (
     <>
       <div>
-      <div>{currentUser?.["role"] === "admin" ? <AddHackathon /> : <></>}</div>
-      Ongoing
-      <div className="shadow-md rounded-md p-4">
-        <table className="min-w-full overflow-x-auto">
-        <thead className="uppercase bg-gray-50 dark:bg-gray-700 text-gray-100">
-            <tr>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">Hackathon Name</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">Deadline</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">Link</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">Description</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">Apply</th>
-            </tr>
-          </thead>
-          <tbody>
-            {hackathons?.map((hackathon, index) => (
-              new Date((hackathon as any)?.["deadline"]) > new Date() && <tr key={index}>
-                <td className="py-2 px-3 text-sm">{hackathon?.["name"]}</td>
-                <td className="py-2 px-3 text-sm">
-                  {convertDate(hackathon?.["deadline"])}
-                </td>
-                <td className="py-2 px-3 text-sm">
-                  <a
-                    href={hackathon?.["link"]}
-                    target="_blank"
-                    className="text-blue-500"
-                  >
-                    Website
-                  </a>
-                </td>
-                <td className="py-2 px-3 text-sm">
-                  {hackathon?.["description"]}
-                </td>
-                <td className="py-2 px-3 text-sm">
-                  <div className="flex flex-row">
-                    {(currentUser as any)?.hackathon.map((h: any, index: any) => {
-                      h === hackathon?.["_id"] ? setReg(true) : null;
-                    })}
-                    {getReg() ? (
-                      null
-                    ) : (
-                      <ApplyHackathon
-                        id={`${hackathon?.["_id"]}`}
-                        userEmail={`${session?.user?.email}`}
-                      />
-                    )}
-                    {setReg(false)}
-                    {currentUser?.["role"] === "admin" ? (
-                      <RemoveHackathon id={`${hackathon?.["_id"]}`} />
-                    ) : (
-                      <></>
-                    )}
-                    <ViewHackathon hackathon={hackathon}/>
-                  </div>
-                </td>
+        <div>
+          {currentUser?.["role"] === "admin" ? <AddHackathon /> : <></>}
+        </div>
+        Ongoing
+        <div className="shadow-md rounded-md p-4">
+          <table className="min-w-full overflow-x-auto">
+            <thead className="uppercase bg-gray-50 dark:bg-gray-700 text-gray-100">
+              <tr>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+                  Hackathon Name
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+                  Deadline
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+                  Link
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+                  Description
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+                  Apply
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {hackathons?.map(
+                (hackathon, index) =>
+                  new Date((hackathon as any)?.["deadline"]) > new Date() && (
+                    <tr key={index}>
+                      <td className="py-2 px-3 text-sm">
+                        {hackathon?.["name"]}
+                      </td>
+                      <td className="py-2 px-3 text-sm">
+                        {convertDate(hackathon?.["deadline"])}
+                      </td>
+                      <td className="py-2 px-3 text-sm">
+                        <a
+                          href={hackathon?.["link"]}
+                          target="_blank"
+                          className="text-blue-500"
+                        >
+                          Website
+                        </a>
+                      </td>
+                      <td className="py-2 px-3 text-sm">
+                        {hackathon?.["description"]}
+                      </td>
+                      <td className="py-2 px-3 text-sm">
+                        <div className="flex flex-row">
+                          {(currentUser as any)?.hackathon.map(
+                            (h: any, index: any) => {
+                              h === hackathon?.["_id"] ? setReg(true) : null;
+                            }
+                          )}
+                          {getReg() ? null : (
+                            <ApplyHackathon
+                              id={`${hackathon?.["_id"]}`}
+                              userEmail={`${session?.user?.email}`}
+                            />
+                          )}
+                          {setReg(false)}
+                          {currentUser?.["role"] === "admin" ? (
+                            <RemoveHackathon id={`${hackathon?.["_id"]}`} />
+                          ) : (
+                            <></>
+                          )}
+                          <ViewHackathon hackathon={hackathon} />
+                        </div>
+                      </td>
+                    </tr>
+                  )
+              )}
+            </tbody>
+          </table>
+        </div>
+        Closed
+        <div className="shadow-md rounded-md p-4">
+          <table className="min-w-full overflow-x-auto">
+            <thead className="uppercase bg-gray-50 dark:bg-gray-700 text-gray-100">
+              <tr>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+                  Hackathon Name
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+                  Deadline
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+                  Link
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+                  Description
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+                  Apply
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {hackathons?.map(
+                (hackathon, index) =>
+                  new Date((hackathon as any)?.["deadline"]) < new Date() && (
+                    <tr key={index}>
+                      <td className="py-2 px-3 text-sm">
+                        {hackathon?.["name"]}
+                      </td>
+                      <td className="py-2 px-3 text-sm">
+                        {convertDate(hackathon?.["deadline"])}
+                      </td>
+                      <td className="py-2 px-3 text-sm">
+                        <a
+                          href={hackathon?.["link"]}
+                          target="_blank"
+                          className="text-blue-500"
+                        >
+                          Website
+                        </a>
+                      </td>
+                      <td className="py-2 px-3 text-sm">
+                        {hackathon?.["description"]}
+                      </td>
+                      <td className="py-2 px-3 text-sm">
+                        <div className="flex flex-row">
+                          {(currentUser as any)?.hackathon.map(
+                            (h: any, index: any) => {
+                              h === hackathon?.["_id"] ? setReg(true) : null;
+                            }
+                          )}
+                          {setReg(false)}
+                          {currentUser?.["role"] === "admin" ? (
+                            <RemoveHackathon id={`${hackathon?.["_id"]}`} />
+                          ) : (
+                            <></>
+                          )}
+                          <ViewHackathon hackathon={hackathon} />
+                        </div>
+                      </td>
+                    </tr>
+                  )
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
-      Closed
-      <div className="shadow-md rounded-md p-4">
-        <table className="min-w-full overflow-x-auto">
-        <thead className="uppercase bg-gray-50 dark:bg-gray-700 text-gray-100">
-            <tr>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">Hackathon Name</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">Deadline</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">Link</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">Description</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">Apply</th>
-            </tr>
-          </thead>
-          <tbody>
-            {hackathons?.map((hackathon, index) => (
-               new Date((hackathon as any)?.["deadline"]) < new Date() && <tr key={index}>
-              <td className="py-2 px-3 text-sm">{hackathon?.["name"]}</td>
-              <td className="py-2 px-3 text-sm">
-                {convertDate(hackathon?.["deadline"])}
-              </td>
-              <td className="py-2 px-3 text-sm">
-                <a
-                  href={hackathon?.["link"]}
-                  target="_blank"
-                  className="text-blue-500"
-                >
-                  Website
-                </a>
-              </td>
-              <td className="py-2 px-3 text-sm">
-                {hackathon?.["description"]}
-              </td>
-              <td className="py-2 px-3 text-sm">
-                <div className="flex flex-row">
-                  {(currentUser as any)?.hackathon.map((h: any, index: any) => {
-                    h === hackathon?.["_id"] ? setReg(true) : null;
-                  })}
-                  {setReg(false)}
-                  {currentUser?.["role"] === "admin" ? (
-                    <RemoveHackathon id={`${hackathon?.["_id"]}`} />
-                  ) : (
-                    <></>
-                  )}
-                  <ViewHackathon hackathon={hackathon}/>
-                </div>
-              </td>
-            </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
     </>
   );
 };

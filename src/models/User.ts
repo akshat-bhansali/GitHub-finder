@@ -30,17 +30,21 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    tags: [{
+    tags: [
+      {
+        type: String,
+      },
+    ],
+    role: {
       type: String,
-    }],
-    role:{
-      type: String,
-      default : "user"
+      default: "user",
     },
-    hackathon: [{
-      type: String,
-      ref: 'Hackathon'
-    }]
+    hackathon: [
+      {
+        type: String,
+        ref: "Hackathon",
+      },
+    ],
   },
   { timestamps: true }
 );

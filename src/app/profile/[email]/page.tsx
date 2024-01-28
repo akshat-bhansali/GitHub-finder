@@ -154,34 +154,37 @@ const Page = () => {
           </tr>
         </thead>
         <tbody>
-          {userHackathons?.map((hackathon: any, index: any) => (
-            new Date(hackathon.deadline)>new Date() && <tr key={index}>
-              <td className="py-2 px-3 text-sm">{hackathon.name}</td>
-              <td className="py-2 px-3 text-sm">
-                {convertDate(hackathon.deadline)}
-              </td>
-              <td className="py-2 px-3 text-sm">
-                <a
-                  href={hackathon.link}
-                  target="_blank"
-                  className="text-blue-500"
-                >
-                  Website
-                </a>
-              </td>
-              <td className="py-2 px-3 text-sm">{hackathon.description}</td>
-              <td className="py-2 px-3 text-sm">
-                <button
-                  onClick={() => {
-                    router.push(`/hackathon/${hackathon._id}`);
-                  }}
-                  className="bg-blue-900 rounded"
-                >
-                  Visit
-                </button>
-              </td>
-            </tr>
-          ))}
+          {userHackathons?.map(
+            (hackathon: any, index: any) =>
+              new Date(hackathon.deadline) > new Date() && (
+                <tr key={index}>
+                  <td className="py-2 px-3 text-sm">{hackathon.name}</td>
+                  <td className="py-2 px-3 text-sm">
+                    {convertDate(hackathon.deadline)}
+                  </td>
+                  <td className="py-2 px-3 text-sm">
+                    <a
+                      href={hackathon.link}
+                      target="_blank"
+                      className="text-blue-500"
+                    >
+                      Website
+                    </a>
+                  </td>
+                  <td className="py-2 px-3 text-sm">{hackathon.description}</td>
+                  <td className="py-2 px-3 text-sm">
+                    <button
+                      onClick={() => {
+                        router.push(`/hackathon/${hackathon._id}`);
+                      }}
+                      className="bg-blue-900 rounded"
+                    >
+                      Visit
+                    </button>
+                  </td>
+                </tr>
+              )
+          )}
         </tbody>
       </table>
       Closed
@@ -206,34 +209,37 @@ const Page = () => {
           </tr>
         </thead>
         <tbody>
-          {userHackathons?.map((hackathon: any, index: any) => (
-            new Date(hackathon.deadline)<new Date() && <tr key={index}>
-              <td className="py-2 px-3 text-sm">{hackathon.name}</td>
-              <td className="py-2 px-3 text-sm">
-                {convertDate(hackathon.deadline)}
-              </td>
-              <td className="py-2 px-3 text-sm">
-                <a
-                  href={hackathon.link}
-                  target="_blank"
-                  className="text-blue-500"
-                >
-                  Website
-                </a>
-              </td>
-              <td className="py-2 px-3 text-sm">{hackathon.description}</td>
-              <td className="py-2 px-3 text-sm">
-                <button
-                  onClick={() => {
-                    router.push(`/hackathon/${hackathon._id}`);
-                  }}
-                  className="bg-blue-900 rounded"
-                >
-                  Visit
-                </button>
-              </td>
-            </tr>
-          ))}
+          {userHackathons?.map(
+            (hackathon: any, index: any) =>
+              new Date(hackathon.deadline) < new Date() && (
+                <tr key={index}>
+                  <td className="py-2 px-3 text-sm">{hackathon.name}</td>
+                  <td className="py-2 px-3 text-sm">
+                    {convertDate(hackathon.deadline)}
+                  </td>
+                  <td className="py-2 px-3 text-sm">
+                    <a
+                      href={hackathon.link}
+                      target="_blank"
+                      className="text-blue-500"
+                    >
+                      Website
+                    </a>
+                  </td>
+                  <td className="py-2 px-3 text-sm">{hackathon.description}</td>
+                  <td className="py-2 px-3 text-sm">
+                    <button
+                      onClick={() => {
+                        router.push(`/hackathon/${hackathon._id}`);
+                      }}
+                      className="bg-blue-900 rounded"
+                    >
+                      Visit
+                    </button>
+                  </td>
+                </tr>
+              )
+          )}
         </tbody>
       </table>
       <div className="flex flex-col">

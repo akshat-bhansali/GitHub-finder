@@ -4,13 +4,11 @@ import { useSession } from "next-auth/react";
 import Hackathon from "@/models/Hackathon";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { Dropdown } from 'flowbite-react';
+import { Dropdown } from "flowbite-react";
 
 const getCurrentUser = async (email: any) => {
   try {
-    const res = await fetch(
-      `/api/getCurrentUser?userEmail=${email}`
-    );
+    const res = await fetch(`/api/getCurrentUser?userEmail=${email}`);
     if (!res.ok) {
       throw new Error("Failed to fetch hackathons");
     }
@@ -29,7 +27,7 @@ const Page = () => {
   const [pages, setPages] = useState(0);
   const [repoNumber, setRepoNumber] = useState(1);
   const [repoShown, setRepoShown] = useState([]);
-  const [userTags,setUserTags] = useState<any>([]);
+  const [userTags, setUserTags] = useState<any>([]);
   const [isButtonDisabled, setButtonDisabled] = useState(true);
   const [userHackathons, setUserHackathons] = useState([]);
   const formatTimeDifference = (updated_at: string | number | Date) => {
@@ -63,7 +61,7 @@ const Page = () => {
         if (data) {
           setCurrentUser(data.currentUser);
           url = data.currentUser?.repo;
-          setUserTags(data.currentUser?.tags)
+          setUserTags(data.currentUser?.tags);
           fetchRepoData();
           getUserHackathons(data.currentUser?.hackathon);
         }
@@ -71,14 +69,14 @@ const Page = () => {
         console.error("Error fetching current user data: ", error);
       }
     };
-  const getUserHackathons = async (arr: any) => {
-    try {
-      const res = await axios.post(`/api/fetchHackathonById`, arr);
-      setUserHackathons(res.data.hackathons);
-    } catch (error) {
-      console.log("Error loading hackathons: ", error);
-    }
-  };
+    const getUserHackathons = async (arr: any) => {
+      try {
+        const res = await axios.post(`/api/fetchHackathonById`, arr);
+        setUserHackathons(res.data.hackathons);
+      } catch (error) {
+        console.log("Error loading hackathons: ", error);
+      }
+    };
     const fetchRepoData = async () => {
       try {
         const res = await axios.get(String(url));
@@ -119,25 +117,28 @@ const Page = () => {
 
     return day + "/" + month + "/" + year;
   };
-  const addTag = (tagToAdd : any) => {
-    if(userTags.length!=2){
-      if(!userTags.includes(tagToAdd)){
+  const addTag = (tagToAdd: any) => {
+    if (userTags.length != 2) {
+      if (!userTags.includes(tagToAdd)) {
         setUserTags([...userTags, tagToAdd]);
         setButtonDisabled(false);
-       } else {
+      } else {
         alert("Tag already present");
-       }
-    } else{
+      }
+    } else {
       alert("Only 2 tags are allowed");
     }
   };
   const handleUpdateTags = async () => {
     try {
-      const response = await axios.put(`/api/updateTags?userEmail=${(currentUser as any)?.email}`,  userTags );
-      console.log('Tags updated successfully',response);
-      setButtonDisabled(true)
+      const response = await axios.put(
+        `/api/updateTags?userEmail=${(currentUser as any)?.email}`,
+        userTags
+      );
+      console.log("Tags updated successfully", response);
+      setButtonDisabled(true);
     } catch (error) {
-      console.error('Error updating tags:', error);
+      console.error("Error updating tags:", error);
     }
   };
 
@@ -157,23 +158,73 @@ const Page = () => {
           <p className="m-4">Username: {currentUser?.["username"]}</p>
           <p className="m-4">Link: {currentUser?.["link"]}</p>
           <div className="flex flex-row gap-5">
-          <Dropdown label="Tags" dismissOnClick={false} >
-            <Dropdown.Item className="bg-white" onClick={()=>{addTag("Frontend")}}>Frontend</Dropdown.Item>
-            <Dropdown.Item className="bg-white" onClick={()=>{addTag("Backend")}}>Backend</Dropdown.Item>
-            <Dropdown.Item className="bg-white" onClick={()=>{addTag("Full Stack")}}>Full Stack</Dropdown.Item>
-            <Dropdown.Item className="bg-white" onClick={()=>{addTag("Blockchain")}}>Blockchain</Dropdown.Item>
-            <Dropdown.Item className="bg-white" onClick={()=>{addTag("AI & ML")}}>AI & ML</Dropdown.Item>
-          </Dropdown>
-          <div className="flex flex-col gap-3">
-              {
-                userTags.map((u:any,i:any)=>{
-                  return(<button onClick={()=>{removeTag(u)}} className="bg-red-900 w-fit rounded border">{u} X</button>)
-                })
-              }
-          </div>
-          <button disabled={isButtonDisabled} onClick={()=>{handleUpdateTags()}} className={`${isButtonDisabled?"bg-red-900":"bg-blue-900"} border`}>
-            SAVE
-          </button>
+            <Dropdown label="Tags" dismissOnClick={false}>
+              <Dropdown.Item
+                className="bg-white"
+                onClick={() => {
+                  addTag("Frontend");
+                }}
+              >
+                Frontend
+              </Dropdown.Item>
+              <Dropdown.Item
+                className="bg-white"
+                onClick={() => {
+                  addTag("Backend");
+                }}
+              >
+                Backend
+              </Dropdown.Item>
+              <Dropdown.Item
+                className="bg-white"
+                onClick={() => {
+                  addTag("Full Stack");
+                }}
+              >
+                Full Stack
+              </Dropdown.Item>
+              <Dropdown.Item
+                className="bg-white"
+                onClick={() => {
+                  addTag("Blockchain");
+                }}
+              >
+                Blockchain
+              </Dropdown.Item>
+              <Dropdown.Item
+                className="bg-white"
+                onClick={() => {
+                  addTag("AI & ML");
+                }}
+              >
+                AI & ML
+              </Dropdown.Item>
+            </Dropdown>
+            <div className="flex flex-col gap-3">
+              {userTags.map((u: any, i: any) => {
+                return (
+                  <button
+                    onClick={() => {
+                      removeTag(u);
+                    }}
+                    className="bg-red-900 w-fit rounded border"
+                  >
+                    {u} X
+                  </button>
+                );
+              })}
+            </div>
+            <button
+              disabled={isButtonDisabled}
+              onClick={() => {
+                handleUpdateTags();
+              }}
+              className={`${
+                isButtonDisabled ? "bg-red-900" : "bg-blue-900"
+              } border`}
+            >
+              SAVE
+            </button>
           </div>
         </div>
       </div>
@@ -199,34 +250,37 @@ const Page = () => {
           </tr>
         </thead>
         <tbody>
-          {userHackathons?.map((hackathon: any, index: any) => (
-            new Date(hackathon.deadline)>new Date() && <tr key={index}>
-              <td className="py-2 px-3 text-sm">{hackathon.name}</td>
-              <td className="py-2 px-3 text-sm">
-                {convertDate(hackathon.deadline)}
-              </td>
-              <td className="py-2 px-3 text-sm">
-                <a
-                  href={hackathon.link}
-                  target="_blank"
-                  className="text-blue-500"
-                >
-                  Website
-                </a>
-              </td>
-              <td className="py-2 px-3 text-sm">{hackathon.description}</td>
-              <td className="py-2 px-3 text-sm">
-                <button
-                  onClick={() => {
-                    router.push(`/hackathon/${hackathon._id}`);
-                  }}
-                  className="bg-blue-900 rounded"
-                >
-                  Visit
-                </button>
-              </td>
-            </tr>
-          ))}
+          {userHackathons?.map(
+            (hackathon: any, index: any) =>
+              new Date(hackathon.deadline) > new Date() && (
+                <tr key={index}>
+                  <td className="py-2 px-3 text-sm">{hackathon.name}</td>
+                  <td className="py-2 px-3 text-sm">
+                    {convertDate(hackathon.deadline)}
+                  </td>
+                  <td className="py-2 px-3 text-sm">
+                    <a
+                      href={hackathon.link}
+                      target="_blank"
+                      className="text-blue-500"
+                    >
+                      Website
+                    </a>
+                  </td>
+                  <td className="py-2 px-3 text-sm">{hackathon.description}</td>
+                  <td className="py-2 px-3 text-sm">
+                    <button
+                      onClick={() => {
+                        router.push(`/hackathon/${hackathon._id}`);
+                      }}
+                      className="bg-blue-900 rounded"
+                    >
+                      Visit
+                    </button>
+                  </td>
+                </tr>
+              )
+          )}
         </tbody>
       </table>
       Closed
@@ -251,34 +305,37 @@ const Page = () => {
           </tr>
         </thead>
         <tbody>
-          {userHackathons?.map((hackathon: any, index: any) => (
-            new Date(hackathon.deadline)<new Date() && <tr key={index}>
-              <td className="py-2 px-3 text-sm">{hackathon.name}</td>
-              <td className="py-2 px-3 text-sm">
-                {convertDate(hackathon.deadline)}
-              </td>
-              <td className="py-2 px-3 text-sm">
-                <a
-                  href={hackathon.link}
-                  target="_blank"
-                  className="text-blue-500"
-                >
-                  Website
-                </a>
-              </td>
-              <td className="py-2 px-3 text-sm">{hackathon.description}</td>
-              <td className="py-2 px-3 text-sm">
-                <button
-                  onClick={() => {
-                    router.push(`/hackathon/${hackathon._id}`);
-                  }}
-                  className="bg-blue-900 rounded"
-                >
-                  Visit
-                </button>
-              </td>
-            </tr>
-          ))}
+          {userHackathons?.map(
+            (hackathon: any, index: any) =>
+              new Date(hackathon.deadline) < new Date() && (
+                <tr key={index}>
+                  <td className="py-2 px-3 text-sm">{hackathon.name}</td>
+                  <td className="py-2 px-3 text-sm">
+                    {convertDate(hackathon.deadline)}
+                  </td>
+                  <td className="py-2 px-3 text-sm">
+                    <a
+                      href={hackathon.link}
+                      target="_blank"
+                      className="text-blue-500"
+                    >
+                      Website
+                    </a>
+                  </td>
+                  <td className="py-2 px-3 text-sm">{hackathon.description}</td>
+                  <td className="py-2 px-3 text-sm">
+                    <button
+                      onClick={() => {
+                        router.push(`/hackathon/${hackathon._id}`);
+                      }}
+                      className="bg-blue-900 rounded"
+                    >
+                      Visit
+                    </button>
+                  </td>
+                </tr>
+              )
+          )}
         </tbody>
       </table>
       <div className="flex flex-col">

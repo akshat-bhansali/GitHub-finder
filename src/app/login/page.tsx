@@ -14,7 +14,6 @@ const Login = () => {
     }
   }, [sessionStatus, router]);
 
-
   if (sessionStatus === "loading") {
     return <h1>Loading...</h1>;
   }

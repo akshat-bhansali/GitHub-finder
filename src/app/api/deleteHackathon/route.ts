@@ -1,4 +1,3 @@
-
 import connect from "@/utils/db";
 import Hackathon from "@/models/Hackathon";
 import User from "@/models/User";
@@ -21,6 +20,9 @@ export async function DELETE(request: any) {
 
     return NextResponse.json({ message: "Hackathon deleted" }, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }

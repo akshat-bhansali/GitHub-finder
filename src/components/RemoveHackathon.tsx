@@ -1,7 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-const RemoveHackathon = ({id}:any) => {
-
+const RemoveHackathon = ({ id }: any) => {
   const router = useRouter();
   const removeTopic = async () => {
     const confirmed = confirm("Are you sure?");
@@ -18,9 +17,9 @@ const RemoveHackathon = ({id}:any) => {
   };
   return (
     <button onClick={removeTopic} className="  bg-red-500 p-3">
-    delete
-  </button>
-  )
-}
+      delete
+    </button>
+  );
+};
 
-export default RemoveHackathon
+export default RemoveHackathon;

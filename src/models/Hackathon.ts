@@ -16,10 +16,12 @@ const hackathonSchema = new Schema(
     description: {
       type: String,
     },
-    
-  user: [{
-    type: String,
-  }]
+
+    user: [
+      {
+        type: String,
+      },
+    ],
   },
   { timestamps: true }
 );

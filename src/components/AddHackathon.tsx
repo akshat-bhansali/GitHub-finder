@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
 const AddHackathon = () => {
-
   const router = useRouter();
-  const [deadline,setDeadline]=useState("");
-    const [link,setLink]=useState("");
-    const [name,setName]=useState("");
-    const [description,setDescription]=useState("");
+  const [deadline, setDeadline] = useState("");
+  const [link, setLink] = useState("");
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
 
-  const handleSubmit = async (event:any) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
     // Perform actions with the form data, for example, send it to an API or perform other operations
     // console.log('Form submitted:', formData);
@@ -19,7 +18,7 @@ const AddHackathon = () => {
         headers: {
           "Content-type": "application/json",
         },
-        body: JSON.stringify({ deadline ,name,link,description}),
+        body: JSON.stringify({ deadline, name, link, description }),
       });
 
       if (res.ok) {
@@ -42,7 +41,9 @@ const AddHackathon = () => {
             type="date"
             name="deadline"
             value={deadline}
-            onChange={(e:any)=>{setDeadline(e.target.value)}}
+            onChange={(e: any) => {
+              setDeadline(e.target.value);
+            }}
             className="border border-gray-300 rounded-md p-2 w-full"
           />
         </div>
@@ -52,7 +53,9 @@ const AddHackathon = () => {
             type="text"
             name="link"
             value={link}
-            onChange={(e:any)=>{setLink(e.target.value)}}
+            onChange={(e: any) => {
+              setLink(e.target.value);
+            }}
             className="border border-gray-300 rounded-md p-2 w-full"
           />
         </div>
@@ -62,7 +65,9 @@ const AddHackathon = () => {
             type="text"
             name="name"
             value={name}
-            onChange={(e:any)=>{setName(e.target.value)}}
+            onChange={(e: any) => {
+              setName(e.target.value);
+            }}
             className="border border-gray-300 rounded-md p-2 w-full"
           />
         </div>
@@ -71,7 +76,9 @@ const AddHackathon = () => {
           <textarea
             name="description"
             value={description}
-            onChange={(e:any)=>{setDescription(e.target.value)}}
+            onChange={(e: any) => {
+              setDescription(e.target.value);
+            }}
             className="border border-gray-300 rounded-md p-2 w-full h-20"
           />
         </div>

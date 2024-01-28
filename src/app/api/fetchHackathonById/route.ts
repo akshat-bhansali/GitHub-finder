@@ -3,8 +3,8 @@ import Hackathon from "@/models/Hackathon";
 import { NextResponse } from "next/server";
 
 export async function POST(request: any) {
-    await connect();
-  const  ids  = await new Response(request.body).json();
+  await connect();
+  const ids = await new Response(request.body).json();
 
   if (!ids || !ids.length) {
     return NextResponse.json("No ids provided in the request body");

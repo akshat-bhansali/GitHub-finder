@@ -54,22 +54,34 @@ const page = () => {
         <table>
           <thead className="uppercase bg-gray-50 dark:bg-gray-700 text-gray-100">
             <tr>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">Username</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">Tags</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">Actions</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+                Username
+              </th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+                Tags
+              </th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody>
             {hackathonUsers.map((u: any, index: any) => (
               <tr key={index}>
-                <td className="flex flex-row gap-2"><img
+                <td className="flex flex-row gap-2">
+                  <img
                     className="rounded-full w-16 h-16 object-cover"
                     src={u.avatar}
                     alt={`Avatar of ${u.username}`}
-                  />{u.username}</td>
+                  />
+                  {u.username}
+                </td>
                 <td>{u.tags.join(", ")}</td>
                 <td>
-                  <button onClick={() => router.push(`/profile/${u.username}`)} className="bg-blue-900">
+                  <button
+                    onClick={() => router.push(`/profile/${u.username}`)}
+                    className="bg-blue-900"
+                  >
                     View Profile
                   </button>
                 </td>

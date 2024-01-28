@@ -1,17 +1,16 @@
-
-import React from 'react';
+import React from "react";
 
 const UserProfileDetails = ({
-  profilePicture , 
-  username ,
-  email , 
-  repositories , 
-  name , 
-  link , 
-  creationDate , 
-  updationDate , 
-  role 
-}:any) => {
+  profilePicture,
+  username,
+  email,
+  repositories,
+  name,
+  link,
+  creationDate,
+  updationDate,
+  role,
+}: any) => {
   return (
     <div>
       <div>
@@ -22,7 +21,7 @@ const UserProfileDetails = ({
       <div>
         <h3>Repositories:</h3>
         <ul>
-          {repositories.map((repo :any, index : any) => (
+          {repositories.map((repo: any, index: any) => (
             <li key={index}>{repo.detail}</li>
           ))}
         </ul>

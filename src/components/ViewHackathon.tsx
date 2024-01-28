@@ -1,18 +1,18 @@
 "use client";
-import React from 'react'
+import React from "react";
 import { useRouter } from "next/navigation";
 
-const ViewHackathon = ({hackathon}:any) => {
+const ViewHackathon = ({ hackathon }: any) => {
   const router = useRouter();
   return (
     <button
-    onClick={() => {
+      onClick={() => {
         router.push(`/hackathon/${hackathon?.["_id"]}`);
-    }}
-  >
-    View
-  </button>
-  )
-}
+      }}
+    >
+      View
+    </button>
+  );
+};
 
-export default ViewHackathon
+export default ViewHackathon;

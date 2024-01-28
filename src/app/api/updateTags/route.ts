@@ -13,10 +13,10 @@ export async function PUT(request: any) {
       return NextResponse.json("User not found");
     }
 
-    const tags  = await new Response( request.body).json();
+    const tags = await new Response(request.body).json();
     currentUser.tags = tags;
 
-    await currentUser.save(); 
+    await currentUser.save();
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error(error);

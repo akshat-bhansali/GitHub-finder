@@ -4,7 +4,7 @@ import GithubProvider from "next-auth/providers/github";
 import User from "@/models/User";
 import connect from "@/utils/db";
 
- const authOptions: any = {
+const authOptions: any = {
   // Configure one or more authentication providers
   providers: [
     GithubProvider({
@@ -39,7 +39,7 @@ import connect from "@/utils/db";
               repo: profile.repos_url,
               name: profile.name,
             });
-            
+
             await newUser.save();
             return true;
           }

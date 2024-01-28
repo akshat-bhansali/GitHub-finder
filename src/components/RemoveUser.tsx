@@ -6,7 +6,7 @@ import User from "@/models/User";
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     await connect();
-    
+
     if (req.method === "DELETE") {
       const { userId, hackathonId } = req.query;
       await User.findByIdAndUpdate(
@@ -17,7 +17,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       res.status(200).json({ success: true });
     } else {
-      res.status(400).json({ success: false, message: "Invalid request method" });
+      res
+        .status(400)
+        .json({ success: false, message: "Invalid request method" });
     }
   } catch (error) {
     console.error("Error removing user hackathon:", error);
