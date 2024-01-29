@@ -66,7 +66,7 @@ const page = () => {
             </tr>
           </thead>
           <tbody>
-            {hackathonUsers.map((u: any, index: any) => (
+            {hackathonUsers?.map((u: any, index: any) => (
               <tr key={index}>
                 <td className="flex flex-row gap-2">
                   <img
