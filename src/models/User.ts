@@ -45,6 +45,7 @@ const userSchema = new Schema(
         ref: "Hackathon",
       },
     ],
+    rooms : [{type:String}]
   },
   { timestamps: true }
 );
