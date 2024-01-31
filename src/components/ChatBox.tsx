@@ -5,20 +5,36 @@ import { io } from "socket.io-client";
 
 const ChatBox = () => {
     const [socket, setSocket] = useState<any>(undefined);
-    const [inbox, setInbox] = useState<any>([]);
+    const [inbox, setInbox] = useState<Array<{ sender: string; message: string; date: string }>>([]);
     const [message,setMessage] = useState<any>("");
     const [roomName,setRoomName] = useState<any>("");
+    const [sender,setSender] = useState("");
+    function formatISODate(isoString:any) {
+        const date = new Date(isoString);
+        const formattedDate = new Intl.DateTimeFormat('en-US', {day: '2-digit',
+        month: 'short',
+        hour: '2-digit',
+        minute: '2-digit',}).format(date);
+      
+        return formattedDate;
+      }
     useEffect(() => {
         const socket = io("http://localhost:3001");
     
-        socket.on("message",(message)=>{
-          setInbox((inbox:any)=>[...inbox,message])
-        })
+        socket.on("message", (message, sender, date) => {
+            const newMessage = {
+              sender: sender,
+              message: message,
+              date: date,
+            };
+            setInbox((prevInbox) => [...prevInbox, newMessage]);
+          });
+          
     
         setSocket(socket);
       }, []);
       const handleSendMessage=()=>{
-        socket.emit("message",message,roomName)
+        socket.emit("message",message,roomName,sender,new Date());
       }
       const handleJoinRoom=()=>{
         socket.emit("joinRoom",roomName)
@@ -49,10 +65,9 @@ const ChatBox = () => {
       <div className="w-3/4 p-4 bg-blue-900">
         <h1 className="text-xl font-bold">Chat</h1>
         <div>
-          {inbox.map((message:any) => (
+          {inbox.map((i:any) => (
             <div className="py-2">
-              {/* <strong>{message.sender}:</strong> */}
-               {message}
+               {i.message} by : {i.sender} at : {formatISODate(i.date)}
             </div>
           ))}
         </div>
@@ -63,6 +78,9 @@ const ChatBox = () => {
         <div className='flex flex-row mt-4'>
         <input className='text-black'  onChange={(e)=>{setRoomName(e.target.value)}}/>
         <button onClick={handleJoinRoom}>Join Room</button>
+        </div>
+        <div className='flex flex-row mt-4'>
+        <input className='text-black'  onChange={(e)=>{setSender(e.target.value)}}/>
         </div>
       </div>
     </div>

@@ -6,18 +6,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { Dropdown } from "flowbite-react";
 
-const getCurrentUser = async (email: any) => {
-  try {
-    const res = await fetch(`/api/getCurrentUser?userEmail=${email}`);
-    if (!res.ok) {
-      throw new Error("Failed to fetch hackathons");
-    }
 
-    return res.json();
-  } catch (error) {
-    console.log("Error loading hackathons: ", error);
-  }
-};
 
 const Page = () => {
   const { data: session }: any = useSession();
@@ -52,7 +41,18 @@ const Page = () => {
       return `${days} days ago`;
     }
   };
-
+  const getCurrentUser = async (email: any) => {
+    try {
+      const res = await fetch(`/api/getCurrentUser?userEmail=${email}`);
+      if (!res.ok) {
+        throw new Error("Failed to fetch hackathons");
+      }
+  
+      return res.json();
+    } catch (error) {
+      console.log("Error loading hackathons: ", error);
+    }
+  };
   useEffect(() => {
     let url = "";
     const fetchCurrentUserData = async () => {

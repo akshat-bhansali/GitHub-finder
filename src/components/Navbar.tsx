@@ -25,9 +25,11 @@ const Navbar = () => {
           <Link href="/" passHref>
             <li className="hover:text-gray-300">
               Search
-              {/* Need to add input */}
             </li>
           </Link>
+          {session?(<Link href="/chat" passHref>
+            <li className="hover:text-gray-300">Chat</li>
+          </Link>):(<></>)}
           {!session ? (
             <Link href="/login" passHref>
               <li className="hover:text-gray-300">Login</li>
