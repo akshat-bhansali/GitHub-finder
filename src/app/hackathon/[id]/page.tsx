@@ -3,14 +3,21 @@ import axios from "axios";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 
 const page = () => {
+  const [currentUser,setCurrentUser] = useState();
+  const { data: session }: any = useSession();
   const router = useRouter();
   const pathname = usePathname();
   const pathParts = pathname.split("/");
   const id = pathParts[pathParts.length - 1];
   const [hackathon, setHackathon] = useState();
   const [hackathonUsers, setHackathonUsers] = useState([]);
+  const handleChat = (user:any)=>{
+    console.log(user,"-",currentUser);
+    // need to add routes here now
+  };
   const getData = async () => {
     try {
       const res = await fetch(`/api/getHackathon/${id}`);
@@ -43,6 +50,32 @@ const page = () => {
   useEffect(() => {
     fetchCurrentUserData();
   }, []);
+  const getCurrentUser = async (email: any) => {
+    try {
+      const res = await fetch(`/api/getCurrentUser?userEmail=${email}`);
+      if (!res.ok) {
+        throw new Error("Failed to fetch hackathons");
+      }
+      return res.json();
+    } catch (error) {
+      console.log("Error loading hackathons: ", error);
+    }
+  };
+  const fetchUserCurrent = async () => {
+    try {
+      const data = await getCurrentUser(session?.user.email);
+      if (data) {
+        setCurrentUser((data as any)?.currentUser)
+      }
+    } catch (error) {
+      console.error("Error fetching current user data: ", error);
+    }
+  };
+  useEffect(()=>{
+    if(session?.user?.email){
+      fetchUserCurrent();
+    }
+  },[session?.user?.email])
   return (
     <div>
       <p>Hackathon Data :</p>
@@ -83,6 +116,11 @@ const page = () => {
                     className="bg-blue-900"
                   >
                     View Profile
+                  </button>
+                  <button onClick={()=>{handleChat(u)}}
+                    className="bg-red-900 ml-3"
+                  >
+                    Chat
                   </button>
                 </td>
               </tr>

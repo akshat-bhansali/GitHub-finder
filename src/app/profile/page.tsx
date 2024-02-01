@@ -1,12 +1,9 @@
 "use client";
 import { SetStateAction, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import Hackathon from "@/models/Hackathon";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { Dropdown } from "flowbite-react";
-
-
 
 const Page = () => {
   const { data: session }: any = useSession();
