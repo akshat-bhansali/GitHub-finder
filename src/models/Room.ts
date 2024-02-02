@@ -9,7 +9,7 @@ const roomSchema = new Schema(
     messages: [{
         time : {type:Date},
         sender : {type:String},
-        text : {type:String},
+        message : {type:String},
         avatar_url : {type:String}
      }],
     

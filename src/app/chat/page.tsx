@@ -13,22 +13,22 @@ const page = () => {
   const router = useRouter();
   const [socket, setSocket] = useState<any>(undefined);
   const [inbox, setInbox] = useState<
-    Array<{ sender: string; message: string; date: string;avatar:string }>
+    Array<{ sender: string; message: string; date: string;avatar_url:string }>
   >([]);
   const [userAvatar,setUserAvatar] = useState("");
   const [message, setMessage] = useState<any>("");
   const [roomName, setRoomName] = useState<any>("");
   const [sender, setSender] = useState("");
-  function formatISODate(isoString: any) {
-    const date = new Date(isoString);
-    const formattedDate = new Intl.DateTimeFormat("en-US", {
-      day: "2-digit",
-      month: "short",
-      hour: "2-digit",
-      minute: "2-digit",
-    }).format(date);
-    return formattedDate;
-  }
+  // function formatISODate(isoString: any) {
+  //   const date = new Date(isoString);
+  //   const formattedDate = new Intl.DateTimeFormat("en-US", {
+  //     day: "2-digit",
+  //     month: "short",
+  //     hour: "2-digit",
+  //     minute: "2-digit",
+  //   }).format(date);
+  //   return formattedDate;
+  // }
   const getCurrentUser = async (email: any) => {
     try {
       const res = await fetch(`/api/getCurrentUser?userEmail=${email}`);
@@ -56,14 +56,29 @@ const page = () => {
       console.error("Error fetching current user data: ", error);
     }
   };
+  const updateInbox = async () => {
+    try {
+      const response = await axios.put('/api/addMessageToInbox', {
+        id: roomName,
+        time: new Date(),
+        sender: sender,
+        message: message,
+        avatar_url: userAvatar,
+      });
+  
+      console.log('Response:', response.data);
+    } catch (error) {
+      console.log('Error:', error);
+    }
+  };
   useEffect(() => {
-    const socket = io("http://localhost:3001");
-    socket.on("message", (message, sender, date,avatar) => {
+    const socket = io("https://github-finder-server.onrender.com");
+    socket.on("message", (message, sender, date,avatar_url) => {
       const newMessage = {
         sender: sender,
         message: message,
         date: date,
-        avatar : avatar
+        avatar_url : avatar_url
       };
       setInbox((prevInbox) => [...prevInbox, newMessage]);
     });
@@ -76,6 +91,7 @@ const page = () => {
   },[session?.user?.email])
   const handleSendMessage = () => {
     socket.emit("message", message, roomName, sender, new Date(),userAvatar);
+    updateInbox();
   };
   const handleJoinRoom = (room: string) => {
     socket?.emit("joinRoom", room);
@@ -95,9 +111,9 @@ const page = () => {
   const setRoom = async ()=>{
     const room = await getRoom()
       setCurrentRoom(room.currentRoom);
+      setInbox(room.currentRoom.messages)
   }
   useEffect(()=>{
-    setRoomName(roomName);
     handleJoinRoom(roomName);
     if(roomName!=""){
       setRoom();
@@ -118,20 +134,22 @@ const page = () => {
       </div>
 
       {/* Right Chat Section */}
-      {roomName!=""? (<div className="w-3/4 p-4 bg-blue-900">
-        <h1 className="text-xl font-bold">Chat</h1>
-        <div>
-          {inbox.map((i: any,id:any) => (
-            <div className="py-2" key={id}>
-              {i.message} by : {i.sender} at : {formatISODate(i.date)}
-              <img src={userAvatar} alt="lolo" className="rounded-full w-16 h-16 object-cover"/>
-            </div>
-          ))}
-        </div>
+      {roomName!=""? (<div className="w-3/4 p-4 bg-blue-900 overflow-scroll">
+        Members : 
         <div className="flex flex-row gap-3">
          {(currentRoom as any)?.members?.map((m:any,i:any)=>{
           return <button key={i} onClick={() => router.push(`/profile/${m}`)}>{m}</button>
          })}
+        </div>
+        <h1 className="text-xl font-bold">Chat</h1>
+        <div>
+          {inbox.map((i: any,id:any) => (
+            <div className="py-2" key={id}>
+              {i.message} by : {i.sender}
+              {/* at : {formatISODate(i.date)} */}
+              <img src={i.avatar_url} alt="lolo" className="rounded-full w-16 h-16 object-cover"/>
+            </div>
+          ))}
         </div>
         <div className="flex flex-row">
           <input
