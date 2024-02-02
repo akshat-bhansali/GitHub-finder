@@ -45,6 +45,7 @@ const page = () => {
     } else{
       console.log("exists")
     }
+    router.push(`/chat`)
   };
   const getData = async () => {
     try {
