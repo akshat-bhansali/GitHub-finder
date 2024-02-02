@@ -14,9 +14,37 @@ const page = () => {
   const id = pathParts[pathParts.length - 1];
   const [hackathon, setHackathon] = useState();
   const [hackathonUsers, setHackathonUsers] = useState([]);
-  const handleChat = (user:any)=>{
-    console.log(user,"-",currentUser);
-    // need to add routes here now
+  const handleChat = async(user:any)=>{
+    const userName = user?.username;
+    const arr2 = (currentUser as any)?.rooms;
+    var flag = "";
+    try {
+      const res = await axios.post(`/api/getChatRoomOfUser`,{"userName":userName,"rooms":arr2});
+      flag =res.data.message;
+    } catch (error) {
+      console.log("Error loading hackathons: ", error);
+    }
+    if("No matching rooms found" == flag){
+      const arr = [];
+      arr.push(user?.username);
+      arr.push((currentUser as any)?.username);
+      var roomID= "";
+      try {
+        const res = await axios.post(`/api/createNewChatRoom`,arr );
+        roomID=res.data.roomId;
+      } catch (error) {
+        console.log("Error loading hackathons: ", error);
+      }
+      try {
+        const res = await axios.put(`/api/addRoomToUser`,{"usernames":arr,"roomId":roomID} );
+        roomID=res.data.roomId;
+      } catch (error) {
+        console.log("Error loading hackathons: ", error);
+      }
+      console.log("created")
+    } else{
+      console.log("exists")
+    }
   };
   const getData = async () => {
     try {
