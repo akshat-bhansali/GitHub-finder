@@ -72,8 +72,8 @@ const page = () => {
     }
   };
   useEffect(() => {
-    // const socket = io("https://github-finder-server.onrender.com");
-    const socket = io("http://localhost:3001");
+    const socket = io("https://github-finder-server.onrender.com");
+    // const socket = io("http://localhost:3001");
     socket.on("message", (message, sender, date,avatar_url) => {
       const newMessage = {
         sender: sender,
