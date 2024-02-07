@@ -65,14 +65,15 @@ const page = () => {
         message: message,
         avatar_url: userAvatar,
       });
+  
       console.log('Response:', response.data);
     } catch (error) {
       console.log('Error:', error);
     }
   };
   useEffect(() => {
-    const socket = io("https://github-finder-server.onrender.com");
-    // const socket = io("http://localhost:3001");
+    // const socket = io("https://github-finder-server.onrender.com");
+    const socket = io("http://localhost:3001");
     socket.on("message", (message, sender, date,avatar_url) => {
       const newMessage = {
         sender: sender,
@@ -90,13 +91,8 @@ const page = () => {
     }
   },[session?.user?.email])
   const handleSendMessage = () => {
-    if(message!=""){
-      socket.emit("message", message, roomName, sender, new Date(),userAvatar);
+    socket.emit("message", message, roomName, sender, new Date(),userAvatar);
     updateInbox();
-    setMessage("");
-    } else{
-      alert('empty message cannot be sent')
-    }
   };
   const handleJoinRoom = (room: string) => {
     socket?.emit("joinRoom", room);
@@ -158,7 +154,6 @@ const page = () => {
         </div>
         <div className="flex flex-row">
           <input
-          value={message}
             className="text-black"
             onChange={(e) => {
               setMessage(e.target.value);
