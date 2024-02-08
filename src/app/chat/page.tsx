@@ -2,11 +2,12 @@
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useRef } from "react";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 
 const page = () => {
+  const chatBoxRef = useRef(null);
   const [currentUser, setCurrentUser] = useState();
   const [currentRoom, setCurrentRoom] = useState("");
   const { data: session }: any = useSession();
@@ -19,7 +20,7 @@ const page = () => {
   const [message, setMessage] = useState<any>("");
   const [roomName, setRoomName] = useState<any>("");
   const [sender, setSender] = useState("");
-  const [allRooms,setAllRooms] = useState([]);
+  const [allRooms, setAllRooms] = useState([]);
   // function formatISODate(isoString: any) {
   //   const date = new Date(isoString);
   //   const formattedDate = new Intl.DateTimeFormat("en-US", {
@@ -62,7 +63,7 @@ const page = () => {
     try {
       const res = await axios.post(`/api/fetchRoomsData`, arr);
       setAllRooms(res.data.rooms);
-      console.log(res.data.rooms)
+      console.log(res.data.rooms);
     } catch (error) {
       console.log("Error loading hackathons: ", error);
     }
@@ -76,15 +77,24 @@ const page = () => {
         message: message,
         avatar_url: userAvatar,
       });
-
-      console.log("Response:", response.data);
+      setMessage("");
+      scrollToBottom();
     } catch (error) {
       console.log("Error:", error);
     }
   };
+  const scrollToBottom = () => {
+    if (chatBoxRef.current) {
+      (chatBoxRef.current as any).scrollTo({
+        top: (chatBoxRef.current as any).scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  };
+
   useEffect(() => {
-    // const socket = io("https://github-finder-server.onrender.com");
-    const socket = io("http://localhost:3001");
+    const socket = io("https://github-finder-server.onrender.com");
+    // const socket = io("http://localhost:3001");
     socket.on("message", (message, sender, date, avatar_url) => {
       const newMessage = {
         sender: sender,
@@ -122,8 +132,9 @@ const page = () => {
   };
   const setRoom = async () => {
     const room = await getRoom();
-    setCurrentRoom(room.currentRoom);
     setInbox(room.currentRoom.messages);
+    setCurrentRoom(room.currentRoom);
+    scrollToBottom();
   };
   useEffect(() => {
     handleJoinRoom(roomName);
@@ -132,7 +143,7 @@ const page = () => {
     }
   }, [roomName]);
   return (
-    <div className="flex h-screen">
+    <div className="flex h-[80vh]">
       {/* Left Sidebar (Inbox) */}
       <div className="w-1/4 bg-red-900 p-4">
         <h1 className="text-xl font-bold">Inbox</h1>
@@ -146,9 +157,9 @@ const page = () => {
               }}
             >
               <div className="flex flex-col">
-                {item.members.map((user:any,i:any)=>{
-                  if(user!=(currentUser as any).username){
-                    return <div key={i}>{user}</div>
+                {item.members.map((user: any, i: any) => {
+                  if (user != (currentUser as any).username) {
+                    return <div key={i}>{user}</div>;
                   }
                 })}
               </div>
@@ -159,7 +170,11 @@ const page = () => {
 
       {/* Right Chat Section */}
       {roomName != "" ? (
-        <div className="w-3/4 p-4 bg-blue-900 overflow-scroll">
+        <div
+          className="w-3/4 p-4 bg-blue-900 overflow-scroll"
+          id="chatBox"
+          ref={chatBoxRef}
+        >
           Members :
           <div className="flex flex-row gap-3">
             {(currentRoom as any)?.members?.map((m: any, i: any) => {
@@ -176,6 +191,7 @@ const page = () => {
               <div className="py-2" key={id}>
                 {i.message} by : {i.sender}
                 {/* at : {formatISODate(i.date)} */}
+                {scrollToBottom()}
                 <img
                   src={i.avatar_url}
                   alt="lolo"
@@ -186,6 +202,7 @@ const page = () => {
           </div>
           <div className="flex flex-row">
             <input
+              value={message}
               className="text-black"
               onChange={(e) => {
                 setMessage(e.target.value);
