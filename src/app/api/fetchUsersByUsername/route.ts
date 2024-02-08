@@ -5,7 +5,6 @@ import { NextResponse } from "next/server";
 export async function POST(request: any) {
   await connect();
   const usernames = await new Response(request.body).json();
-
   if (!usernames || !usernames.length) {
     return NextResponse.json("No usernames provided in the request body");
   }

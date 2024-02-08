@@ -19,6 +19,7 @@ const page = () => {
   const [message, setMessage] = useState<any>("");
   const [roomName, setRoomName] = useState<any>("");
   const [sender, setSender] = useState("");
+  const [allRooms,setAllRooms] = useState([]);
   // function formatISODate(isoString: any) {
   //   const date = new Date(isoString);
   //   const formattedDate = new Intl.DateTimeFormat("en-US", {
@@ -48,12 +49,22 @@ const page = () => {
         setCurrentUser(data.currentUser);
         setSender(data.currentUser?.username);
         setUserAvatar(data.currentUser?.avatar);
+        getRooms(data.currentUser.rooms);
         if (data.currentUser?.rooms.length > 0) {
           setRoomName(data.currentUser?.rooms[0]);
         }
       }
     } catch (error) {
       console.error("Error fetching current user data: ", error);
+    }
+  };
+  const getRooms = async (arr: any) => {
+    try {
+      const res = await axios.post(`/api/fetchRoomsData`, arr);
+      setAllRooms(res.data.rooms);
+      console.log(res.data.rooms)
+    } catch (error) {
+      console.log("Error loading hackathons: ", error);
     }
   };
   const updateInbox = async () => {
@@ -72,8 +83,8 @@ const page = () => {
     }
   };
   useEffect(() => {
-    const socket = io("https://github-finder-server.onrender.com");
-    // const socket = io("http://localhost:3001");
+    // const socket = io("https://github-finder-server.onrender.com");
+    const socket = io("http://localhost:3001");
     socket.on("message", (message, sender, date, avatar_url) => {
       const newMessage = {
         sender: sender,
@@ -125,16 +136,22 @@ const page = () => {
       {/* Left Sidebar (Inbox) */}
       <div className="w-1/4 bg-red-900 p-4">
         <h1 className="text-xl font-bold">Inbox</h1>
-        <ul>
-          {(currentUser as any)?.rooms.map((item: any, i: any) => (
+        <ul className="flex flex-col">
+          {allRooms?.map((item: any, i: any) => (
             <button
               key={i}
-              className="py-2 border rounded text-sm"
+              className="py-1 border rounded text-sm"
               onClick={() => {
-                setRoomName(item);
+                setRoomName(item._id);
               }}
             >
-              {item}
+              <div className="flex flex-col">
+                {item.members.map((user:any,i:any)=>{
+                  if(user!=(currentUser as any).username){
+                    return <div key={i}>{user}</div>
+                  }
+                })}
+              </div>
             </button>
           ))}
         </ul>

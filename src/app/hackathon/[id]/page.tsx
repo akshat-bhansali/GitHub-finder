@@ -22,7 +22,7 @@ const page = () => {
       const res = await axios.post(`/api/getChatRoomOfUser`,{"userName":userName,"rooms":arr2});
       flag =res.data.message;
     } catch (error) {
-      console.log("Error loading hackathons: ", error);
+      console.log("Error loading rooms: ", error);
     }
     if("No matching rooms found" == flag){
       const arr = [];
@@ -33,7 +33,7 @@ const page = () => {
         const res = await axios.post(`/api/createNewChatRoom`,arr );
         roomID=res.data.roomId;
       } catch (error) {
-        console.log("Error loading hackathons: ", error);
+        console.log("Error loading rooms: ", error);
       }
       try {
         const res = await axios.put(`/api/addRoomToUser`,{"usernames":arr,"roomId":roomID} );
