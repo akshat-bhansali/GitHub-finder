@@ -91,7 +91,8 @@ const Page = () => {
     <>
       <div>
         <div>
-          {currentUser?.["role"] === "admin" ? <AddHackathon /> : <></>}
+          {/* {currentUser?.["role"] === "admin" ? <AddHackathon /> : <></>} */}
+          {currentUser?.["role"] === "admin" ? <AddHackathon /> : <AddHackathon/>}
         </div>
         <div className=" mx-4 mt-4">
         Ongoing
