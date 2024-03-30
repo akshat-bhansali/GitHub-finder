@@ -48,6 +48,9 @@ const Page = () => {
   const router = useRouter();
   const [hackathons, setHackathons] = useState([]);
   const [currentUser, setCurrentUser] = useState();
+  const [ongoingHackathons, setOngoingHackathons] = useState(false);
+  const [closedHackathons, setClosedHackathons] = useState(false);
+
   // const [reg, setReg] = useState(false);
   let reg = false;
   const getReg = () => {
@@ -87,91 +90,118 @@ const Page = () => {
       fetchCurrentUserData();
     }
   }, [session?.user?.email]);
+
+
+  useEffect(() => {
+    if (hackathons) {
+      const ongoing = hackathons.filter(
+        (hackathon: any) => new Date(hackathon.deadline) > new Date()
+      );
+      const closed = hackathons.filter(
+        (hackathon: any) => new Date(hackathon.deadline) < new Date()
+      );
+      if (ongoing.length > 0) {
+        setOngoingHackathons(true);
+      }
+      if (closed.length > 0) {
+        setClosedHackathons(true);
+      }
+    }
+  }
+  , [hackathons]);
+
   return (
     <>
       <div>
         <div>
-          {currentUser?.["role"] === "admin" ? <AddHackathon /> : <></>}
+          {currentUser?.["role"] === "admin" ? <AddHackathon /> : null}
         </div>
         <div className=" mx-4 mt-4">
-        Ongoing
-        <div className=" ">
+        
+          <div className=" ">
+          Ongoing
+          <div className="shadow-md rounded-md  ">
+            <table className="min-w-full overflow-x-auto border-gray-600 border  mb-4 rounded-xl container">
+            <thead className="uppercase bg-gray-50 dark:bg-gray-700 text-gray-100 ">
+                <tr>
+                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider ">
+                    <span className="">Hackathon Name</span>
+                  </th>
+                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider ">
+                    <span className="   ">Deadline</span>
+                  </th>
+                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+                    <span className="md:visible invisible  absolute md:relative">Link</span>
+                  </th>
+                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+                  <span className=" invisible md:visible absolute md:relative ">Description</span>
+                  </th>
+                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+                  <span className=" ">Apply</span>
+                  </th>
+                </tr>
+              </thead>
+        {ongoingHackathons ? (
 
-        <div className="shadow-md rounded-md  ">
-          <table className="min-w-full overflow-x-auto border-gray-600 border  mb-4 rounded-xl container">
-          <thead className="uppercase bg-gray-50 dark:bg-gray-700 text-gray-100 ">
-              <tr>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider ">
-                  <span className="">Hackathon Name</span>
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider ">
-                  <span className="   ">Deadline</span>
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
-                  <span className="md:visible invisible  absolute md:relative">Link</span>
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
-                <span className=" invisible md:visible absolute md:relative ">Description</span>
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
-                <span className=" ">Apply</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {hackathons?.map(
-                (hackathon, index) =>
-                  new Date((hackathon as any)?.["deadline"]) > new Date() && (
-                    <tr key={index}>
-                      <td className="py-2 px-3 text-sm">
-                        {hackathon?.["name"]}
-                      </td>
-                      <td className="py-2 px-3 text-sm  " >
-                        {convertDate(hackathon?.["deadline"])}
-                      </td>
-                      <td className="py-2 px-3 text-sm">
-                        <a
-                          href={hackathon?.["link"]}
-                          target="_blank"
-                          className="text-blue-500 invisible md:visible absolute md:relative"
-                        >
-                          Website
-                        </a>
-                      </td>
-                      <td className="py-2 px-3 text-sm  invisible md:visible absolute md:relative">
-                        {hackathon?.["description"]}
-                      </td>
-                      <td className="py-2 px-3 text-sm ">
-                        <div className="flex flex-row w-1/2 border text-center bg-red-600 rounded-full justify-center text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium   px-3 py-1 border-gray-600  mx-4 text-xs">
-                          {(currentUser as any)?.hackathon.map(
-                            (h: any, index: any) => {
-                              h === hackathon?.["_id"] ? setReg(true) : null;
-                            }
-                          )}
-                          {getReg() ? null : (
-                            <ApplyHackathon
-                              id={`${hackathon?.["_id"]}`}
-                              userEmail={`${session?.user?.email}`}
-                            />
-                          )}
-                          {setReg(false)}
-                          {currentUser?.["role"] === "admin" ? (
-                            <RemoveHackathon id={`${hackathon?.["_id"]}`} />
-                          ) : (
-                            <></>
-                          )}
-                          <ViewHackathon hackathon={hackathon} />
-                        </div>
-                      </td>
-                    </tr>
-                  )
-              )}
-            </tbody>
-          </table>
-        </div>
-        </div>
-        Closed
-        <div className="shadow-md rounded-md ">
+              <tbody>
+                {hackathons?.map(
+                  (hackathon, index) =>
+                    new Date((hackathon as any)?.["deadline"]) > new Date() && (
+                      <tr key={index}>
+                        <td className="py-2 px-3 text-sm">
+                          {hackathon?.["name"]}
+                        </td>
+                        <td className="py-2 px-3 text-sm  " >
+                          {convertDate(hackathon?.["deadline"])}
+                        </td>
+                        <td className="py-2 px-3 text-sm">
+                          <a
+                            href={hackathon?.["link"]}
+                            target="_blank"
+                            className="text-blue-500 invisible md:visible absolute md:relative"
+                          >
+                            Website
+                          </a>
+                        </td>
+                        <td className="py-2 px-3 text-sm  invisible md:visible absolute md:relative">
+                          {hackathon?.["description"]}
+                        </td>
+                        <td className="py-2 px-3 text-sm flex">
+                          <div className="flex">
+                            {(currentUser as any)?.hackathon.map(
+                              (h: any, index: any) => {
+                                h === hackathon?.["_id"] ? setReg(true) : null;
+                              }
+                            )}
+                            {getReg() ? null : (
+                              <ApplyHackathon
+                                id={`${hackathon?.["_id"]}`}
+                                userEmail={`${session?.user?.email}`}
+                              />
+                            )}
+                            {setReg(false)}
+                            {currentUser?.["role"] === "admin" ? (
+                              <RemoveHackathon id={`${hackathon?.["_id"]}`} />
+                            ) : (
+                              null
+                            )}
+                          </div>
+                          <div className="flex px-4 border text-center bg-red-600 rounded-full justify-center text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium py-2 border-gray-600 mx-4 text-xs">
+                            <ViewHackathon hackathon={hackathon} />
+                          </div>
+                        </td>
+                      </tr>
+                    )
+                )}
+              </tbody>
+        ): <p className="my-4">No Ongoing Hackthon</p>}
+
+            </table>
+          </div>
+          </div>
+       
+          <div className="shadow-md rounded-md ">
+          Closed
           <table className="min-w-full overflow-x-auto border-gray-600 border  mb-4 rounded-xl container">
           <thead className="uppercase bg-gray-50 dark:bg-gray-700 text-gray-100 ">
               <tr>
@@ -192,6 +222,8 @@ const Page = () => {
                 </th>
               </tr>
             </thead>
+        {closedHackathons ? (
+
             <tbody>
               {hackathons?.map(
                 (hackathon, index) =>
@@ -216,7 +248,7 @@ const Page = () => {
                         {hackathon?.["description"]}
                       </td>
                       <td className="py-2 px-3 text-sm">
-                        <div className="flex flex-row w-1/2 border text-center bg-red-600 rounded-full justify-center text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium    py-1 border-gray-600  mx-4 text-xs">
+                          <div className="flex">
                           {(currentUser as any)?.hackathon.map(
                             (h: any, index: any) => {
                               h === hackathon?.["_id"] ? setReg(true) : null;
@@ -228,13 +260,16 @@ const Page = () => {
                           ) : (
                             <></>
                           )}
+                        <div className="flex flex-row w-1/2 border text-center bg-red-600 rounded-full justify-center text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium    py-1 border-gray-600  mx-4 text-xs">
                           <ViewHackathon hackathon={hackathon} />
                         </div>
+                          </div>
                       </td>
                     </tr>
                   )
               )}
             </tbody>
+        ) : <p>No Closed Hackthon</p>}
           </table>
         </div>
         </div>

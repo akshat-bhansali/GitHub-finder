@@ -16,6 +16,9 @@ const Page = () => {
   const [userTags, setUserTags] = useState<any>([]);
   const [isButtonDisabled, setButtonDisabled] = useState(true);
   const [userHackathons, setUserHackathons] = useState([]);
+  const [ongoingHackathons, setOngoingHackathons] = useState(false);
+  const [closedHackathons, setClosedHackathons] = useState(false);
+
   const formatTimeDifference = (updated_at: string | number | Date) => {
     const currentTime = new Date();
     const updatedAtTime = new Date(updated_at);
@@ -101,6 +104,25 @@ const Page = () => {
     }
     setRepoShown(tempArray);
   }, [repoNumber, pages]);
+
+  useEffect(() => {
+    if (userHackathons) {
+      const ongoing = userHackathons.filter(
+        (hackathon: any) => new Date(hackathon.deadline) > new Date()
+      );
+      const closed = userHackathons.filter(
+        (hackathon: any) => new Date(hackathon.deadline) < new Date()
+      );
+      if (ongoing.length > 0) {
+        setOngoingHackathons(true);
+      }
+      if (closed.length > 0) {
+        setClosedHackathons(true);
+      }
+    }
+  }
+  , [userHackathons]);
+
   const removeTag = (tagToRemove: any) => {
     const updatedTags = userTags.filter((tag: any) => tag !== tagToRemove);
     setUserTags(updatedTags);
@@ -162,11 +184,13 @@ const Page = () => {
             </p>
             <p className="m-4">
               <span className="text-lg">Link: </span>
-              <span className="text-sm">{currentUser?.["link"]}</span>
+              <span className="text-sm text-blue-600 hover:text-blue-700">{currentUser?.["link"]}</span>
             </p>
-            <div className="flex flex-row gap-5 ">
+            <div className="flex gap-4 p-2">
+              <div>
               <Dropdown label="Tags" dismissOnClick={false}>
-                <Dropdown.Item
+                {(userTags[0] !== "Frontend" && userTags[1] !== "Frontend") ? (
+                  <Dropdown.Item
                   className="bg-white"
                   onClick={() => {
                     addTag("Frontend");
@@ -174,7 +198,9 @@ const Page = () => {
                 >
                   Frontend
                 </Dropdown.Item>
-                <Dropdown.Item
+                ):null}
+                {(userTags[1] !== "Backend" && userTags[0] !== "Backend") ? (
+                  <Dropdown.Item
                   className="bg-white"
                   onClick={() => {
                     addTag("Backend");
@@ -182,7 +208,19 @@ const Page = () => {
                 >
                   Backend
                 </Dropdown.Item>
-                <Dropdown.Item
+                ):null}
+                {(userTags[0] !== "Blockchain" && userTags[1] !== "Blockchain") ? (
+                  <Dropdown.Item
+                  className="bg-white"
+                  onClick={() => {
+                    addTag("Blockchain");
+                  }}
+                >
+                 Blockchain
+                </Dropdown.Item>
+                ):null}
+                {(userTags[0] !== "Full Stack" && (userTags[1] !== "Full Stack")) ? (
+                  <Dropdown.Item
                   className="bg-white"
                   onClick={() => {
                     addTag("Full Stack");
@@ -190,15 +228,9 @@ const Page = () => {
                 >
                   Full Stack
                 </Dropdown.Item>
-                <Dropdown.Item
-                  className="bg-white"
-                  onClick={() => {
-                    addTag("Blockchain");
-                  }}
-                >
-                  Blockchain
-                </Dropdown.Item>
-                <Dropdown.Item
+                ):null}
+                {(userTags[0] !== "AI & ML" && userTags[1] !== "AI & ML") ? (
+                  <Dropdown.Item
                   className="bg-white"
                   onClick={() => {
                     addTag("AI & ML");
@@ -206,36 +238,44 @@ const Page = () => {
                 >
                   AI & ML
                 </Dropdown.Item>
+                ):null}
               </Dropdown>
-              <div className="flex flex-col gap-3 ">
+              </div>
+              <div className="flex flex-col gap-3 justify-start ">
                 {userTags.map((u: any, i: any) => {
                   return (
                     <button
                       onClick={() => {
                         removeTag(u);
                       }}
-                      className="bg-red-900 w-fit rounded border"
+                      className="rounded bg-red-800 px-2 py-1 "
                     >
-                      {u} X
+                      {u} <span className="text-black text-base text-start pb-2">X</span>
                     </button>
                   );
                 })}
               </div>
-              <button
+             <div>
+             <button
                 disabled={isButtonDisabled}
                 onClick={() => {
                   handleUpdateTags();
                 }}
                 className={`${
                   isButtonDisabled ? "bg-red-900" : "bg-blue-900"
-                } border "text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg  px-3 py-1 border-gray-600 text-center mx-4 text-xs`}
+                } border "text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium text-base rounded-lg  px-3 py-1 border-gray-600 text-center mx-4`}
               >
                 SAVE
               </button>
+             </div>
             </div>
           </div>
         </div>
+        
+        <>
+        <p>
         Ongoing
+        </p>
         <div className="rounded-xl ">
           <table className="min-w-full overflow-x-auto border-gray-600 border  mb-4 rounded-xl container">
             <thead className="uppercase bg-gray-50 dark:bg-gray-700 text-gray-100">
@@ -257,6 +297,7 @@ const Page = () => {
                 </th>
               </tr>
             </thead>
+            {ongoingHackathons ? (
             <tbody>
               {userHackathons?.map(
                 (hackathon: any, index: any) =>
@@ -283,7 +324,7 @@ const Page = () => {
                           onClick={() => {
                             router.push(`/hackathon/${hackathon._id}`);
                           }}
-                          className="bg-blue-900 rounded px-4 py-2"
+                          className="flex flex-row w-1/2 border text-center bg-red-600 rounded-xl justify-center text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium   px-2 py-1 border-gray-600  mx-4 text-xs"
                         >
                           Visit
                         </button>
@@ -292,9 +333,14 @@ const Page = () => {
                   )
               )}
             </tbody>
+            ) : <p className="my-4">No Ongoing hackathons</p>}
           </table>
         </div>
-        Closed
+        </>
+        
+       
+        <>
+        <p>Closed</p>
         <table className="min-w-full overflow-x-auto border-gray-600 border  mb-7">
           <thead className="uppercase bg-gray-50 dark:bg-gray-700 text-gray-100">
             <tr>
@@ -315,6 +361,7 @@ const Page = () => {
               </th>
             </tr>
           </thead>
+          {closedHackathons ? (
           <tbody>
             {userHackathons?.map(
               (hackathon: any, index: any) =>
@@ -341,7 +388,7 @@ const Page = () => {
                         onClick={() => {
                           router.push(`/hackathon/${hackathon._id}`);
                         }}
-                        className="bg-blue-900 rounded px-4 py-2"
+                        className="flex flex-row w-1/2 border text-center bg-red-600 rounded-xl justify-center text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium   px-2 py-1 border-gray-600  mx-4 text-xs"
                       >
                         Visit
                       </button>
@@ -350,7 +397,11 @@ const Page = () => {
                 )
             )}
           </tbody>
+          ) : <p className="my-4">No Closed hackathons</p>}
         </table>
+        </>
+        
+        
         <div className="flex flex-col">
           <div className="flex flex-row">
             {Array.from({ length: pages }, (_, index) => index + 1).map(
@@ -368,7 +419,7 @@ const Page = () => {
               }
             )}
           </div>
-          <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4   grid-rows-3 gap-4">
+          <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3  grid-rows-3 lg:gap-8 gap-4 ">
             {repoShown.map((repo, i) => (
               <div className="border rounded-md px-2 py-2">
                 <div className="flex items-center justify-between mb-4">
@@ -379,7 +430,7 @@ const Page = () => {
                   </div>
                   <a
                     href={(repo as any)?.html_url}
-                    className="bg-blue-500 text-white rounded-md p-2 text-xs hover:bg-blue-600"
+                    className="flex flex-row border text-center bg-red-600 rounded-xl justify-center text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium   px-3 py-2 border-gray-600  mx-4 text-xs"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
