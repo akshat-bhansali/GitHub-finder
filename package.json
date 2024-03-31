@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@lobehub/ui": "^1.137.7",
     "axios": "^1.6.0",
     "flowbite-react": "^0.7.2",
     "mongoose": "^8.0.0",
