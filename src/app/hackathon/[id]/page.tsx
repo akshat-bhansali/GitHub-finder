@@ -137,7 +137,7 @@ const page = () => {
                     src={u.avatar}
                     alt={`Avatar of ${u.username}`}
                   />
-                  {u.username}
+                  <div className="mt-5">{u.username}</div>
                 </td>
                 <td>{u.tags.join(", ")}</td>
                 <td>
