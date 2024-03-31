@@ -182,7 +182,9 @@ const Navbar = () => {
                 {searchedUser ? (
                   <div className="absolute md:left-0 right-40 top-14 bg-[rgb(10,1,31)] w-60 rounded-lg border border-gray-500 z-10">
                     {searchedUser.map((user: any) => (
-                      <Link href={`/profile/${user.username}`} key={user._id}>
+                      <Link href={`/profile/${user.username}`} key={user._id} onClick={()=>{setSearchedUser([]);
+                      setInputText("");
+                      setCrossButton(false)}}>
                         <li className="hover:text-gray-300 text-sm px-4 py-2 font-serif">
                           {user.name}
                         </li>
