@@ -40,7 +40,7 @@ const Navbar = () => {
 
   const Menu = () => {
     return (
-      <div className="flex bg-[rgb(10,1,31)] w-56 delay-75 rounded-lg border border-gray-500 flex-col list-none md:invisible visible absolute right-2 top-20 items-end justify-end p-4">
+      <div className="flex bg-[rgb(10,1,31)] w-56 delay-75 rounded-lg border border-gray-500 flex-col list-none md:invisible visible absolute right-2 top-20 items-end justify-end p-4 z-10">
         <Link href="/" passHref>
           <li className="hover:text-gray-300 list-none text-sm align-middle font-serif">
             Home
@@ -180,7 +180,7 @@ const Navbar = () => {
             </li>
             <div className="relative">
                 {searchedUser ? (
-                  <div className="absolute md:left-0 right-40 top-14 bg-[rgb(10,1,31)] w-60 rounded-lg border border-gray-500">
+                  <div className="absolute md:left-0 right-40 top-14 bg-[rgb(10,1,31)] w-60 rounded-lg border border-gray-500 z-10">
                     {searchedUser.map((user: any) => (
                       <Link href={`/profile/${user.username}`} key={user._id}>
                         <li className="hover:text-gray-300 text-sm px-4 py-2 font-serif">

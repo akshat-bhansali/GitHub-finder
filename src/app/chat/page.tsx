@@ -112,8 +112,12 @@ const page = () => {
     }
   }, [session?.user?.email]);
   const handleSendMessage = () => {
-    socket.emit("message", message, roomName, sender, new Date(), userAvatar);
+    if(message!=""){
+      socket.emit("message", message, roomName, sender, new Date(), userAvatar);
     updateInbox();
+    } else{
+      alert("Message cannot be empty")
+    }
   };
   const handleJoinRoom = (room: string) => {
     socket?.emit("joinRoom", room);
@@ -141,6 +145,7 @@ const page = () => {
     if (roomName != "") {
       setRoom();
     }
+    scrollToBottom();
   }, [roomName]);
   return (
     <div className="h-[88vh] overflow-hidden flex ">
@@ -199,7 +204,6 @@ const page = () => {
        
         <div className="md:h-[88%] h-[90%] overflow-scroll px-4">
         <div className="-z-10 h-[5%] md:h-[12%] p-4 w-3/4"></div>
-        <h1 className="text-2xl font-bold p-4 my-2">Chat</h1>
           <div>
             {inbox.map((i: any, id: any) => (
               <div className="py-2" key={id}>
