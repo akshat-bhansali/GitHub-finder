@@ -23,7 +23,7 @@ const getCurrentUser = async (email: any) => {
 
 const getData = async () => {
   try {
-    const res = await fetch("/api/getHackathon", { cache: 'no-cache' });
+    const res = await fetch("/api/getHackathon");
     if (!res.ok) {
       throw new Error("Failed to fetch hackathons");
     }
