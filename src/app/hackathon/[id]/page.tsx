@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 
 const page = () => {
-  const [currentUser,setCurrentUser] = useState();
+  const [currentUser, setCurrentUser] = useState();
   const { data: session }: any = useSession();
   const router = useRouter();
   const pathname = usePathname();
@@ -14,36 +14,36 @@ const page = () => {
   const id = pathParts[pathParts.length - 1];
   const [hackathon, setHackathon] = useState();
   const [hackathonUsers, setHackathonUsers] = useState([]);
-  const handleChat = async(user:any)=>{
+  const handleChat = async (user: any) => {
     const userName = user?.username;
     const arr2 = (currentUser as any)?.rooms;
     var flag = "";
     try {
-      const res = await axios.post(`/api/getChatRoomOfUser`,{"userName":userName,"rooms":arr2});
-      flag =res.data.message;
+      const res = await axios.post(`/api/getChatRoomOfUser`, { "userName": userName, "rooms": arr2 });
+      flag = res.data.message;
     } catch (error) {
       console.log("Error loading rooms: ", error);
-      
+
     }
-    if("No matching rooms found" == flag){
+    if ("No matching rooms found" == flag) {
       const arr = [];
       arr.push(user?.username);
       arr.push((currentUser as any)?.username);
-      var roomID= "";
+      var roomID = "";
       try {
-        const res = await axios.post(`/api/createNewChatRoom`,arr );
-        roomID=res.data.roomId;
+        const res = await axios.post(`/api/createNewChatRoom`, arr);
+        roomID = res.data.roomId;
       } catch (error) {
         console.log("Error loading rooms: ", error);
       }
       try {
-        const res = await axios.put(`/api/addRoomToUser`,{"usernames":arr,"roomId":roomID} );
-        roomID=res.data.roomId;
+        const res = await axios.put(`/api/addRoomToUser`, { "usernames": arr, "roomId": roomID });
+        roomID = res.data.roomId;
       } catch (error) {
         console.log("Error loading hackathons: ", error);
       }
       console.log("created")
-    } else{
+    } else {
       console.log("exists")
     }
     router.push(`/chat`)
@@ -101,11 +101,11 @@ const page = () => {
       console.error("Error fetching current user data: ", error);
     }
   };
-  useEffect(()=>{
-    if(session?.user?.email){
+  useEffect(() => {
+    if (session?.user?.email) {
       fetchUserCurrent();
     }
-  },[session?.user?.email])
+  }, [session?.user?.email])
   return (
     <div>
       <p>Hackathon Data :</p>
@@ -131,24 +131,28 @@ const page = () => {
           <tbody>
             {hackathonUsers?.map((u: any, index: any) => (
               <tr key={index}>
-                <td className="flex flex-row gap-2">
-                  <img
-                    className="rounded-full w-16 h-16 object-cover my-2"
-                    src={u.avatar}
-                    alt={`Avatar of ${u.username}`}
-                  />
-                  <div className="mt-5">{u.username}</div>
+                <td className="">
+                  <div className="w-fit flex flex-col justify-center items-center pt-2">
+                    <img
+                      className="rounded-full w-16 h-16 object-cover"
+                      src={u.avatar}
+                      alt={`Avatar of ${u.username}`}
+                    />
+                    <div className="text-[15px] font-bold mt-[-7px]">{u.username}</div>
+                  </div>
                 </td>
-                <td>{u.tags.join(", ")}</td>
+                <td className="">
+                  <span className="text-[18px] font-bold">{u.tags.join(", ")}</span>
+                </td>
                 <td>
                   <button
                     onClick={() => router.push(`/profile/${u.username}`)}
-                    className="bg-blue-900 px-3 py-2 rounded-lg"
+                    className="bg-blue-900 px-3 py-2 rounded-lg text-[15px]"
                   >
-                    View Profile
+                    Profile
                   </button>
-                  <button onClick={()=>{handleChat(u)}}
-                    className="bg-red-900 ml-3 px-3 py-2 rounded-lg"
+                  <button onClick={() => { handleChat(u) }}
+                    className="bg-red-900 px-3 py-2 rounded-lg text-[15px] mt-1 ml-1"
                   >
                     Chat
                   </button>

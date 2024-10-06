@@ -4,6 +4,10 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { Dropdown } from "flowbite-react";
+import { MdOutlineMarkEmailRead } from "react-icons/md";
+import { FaRegUserCircle } from "react-icons/fa";
+import { FaGithub } from "react-icons/fa";
+import HackCard from "@/components/HackCard";
 
 const Page = () => {
   const { data: session }: any = useSession();
@@ -121,7 +125,7 @@ const Page = () => {
       }
     }
   }
-  , [userHackathons]);
+    , [userHackathons]);
 
   const removeTag = (tagToRemove: any) => {
     const updatedTags = userTags.filter((tag: any) => tag !== tagToRemove);
@@ -164,120 +168,235 @@ const Page = () => {
   return (
     <>
       <div className="mx-7">
-        <div className="md:flex justify-evenly align-middle p-10  mb-5 ">
-          <div>
+        <div className="md:flex-row flex-col flex justify-center items-center align-middle p-10 mb-5">
+          <div className="w-[270px] md:w-[320px]">
             <img
               src={currentUser?.["avatar"]}
               alt="Profile Picture"
-              className="rounded-[50%] xl:h-80 xl:w-80  h-60 sm:h-80  border-8 border-[rgb(30,28,74)]"
+              className="h-60 sm:h-80 w-full md:rounded-tl-[10px]"
             />
-            <p className="ml-10 mt-6 text-2xl">{currentUser?.["name"]}</p>
+            <p
+              className="text-white w-full text-xl font-extrabold text-center py-5 md:rounded-bl-[10px]"
+              style={{
+                background: 'linear-gradient(to right, blue, red)',
+              }}
+            >
+              {currentUser?.["name"]}
+            </p>
           </div>
-          <div className="border-gray-600 border  rounded-lg  ">
-            <p className="m-4">
-              <span className="text-lg">Email: </span>
-              <span className="text-sm">{currentUser?.["email"]}</span>
+          <div className="md:bg-transparent text-[15px]">
+            <p className="m-4 flex hover:bg-[rgb(61,74,216)] hover:translate-y-[-10px] transition duration-500 rounded-[10px] cursor-pointer px-4 py-4">
+              <span className="">
+                <MdOutlineMarkEmailRead className="w-[30px] h-[30px] mr-4 my-auto" />
+              </span>
+              <span className="font-semibold text-white">{currentUser?.["email"]}</span>
             </p>
-            <p className="m-4">
-              <span className="text-lg">Username:</span>
-              <span className="text-sm"> {currentUser?.["username"]}</span>
+
+            <p className="m-4 flex hover:bg-[rgb(61,74,216)] hover:translate-y-[-10px] transition duration-500 rounded-[10px] cursor-pointer px-4 py-4">
+              <span className="">
+                <FaRegUserCircle className="w-[30px] h-[30px] mr-4 my-auto" />
+              </span>
+              <span className="font-semibold text-white">{currentUser?.["username"]}</span>
             </p>
-            <p className="m-4">
-              <span className="text-lg">Link: </span>
-              <span className="text-sm text-blue-600 hover:text-blue-700">{currentUser?.["link"]}</span>
+
+            <p className="m-4 flex hover:bg-[rgb(61,74,216)] hover:translate-y-[-10px] transition duration-500 rounded-[10px] cursor-pointer px-4 py-4">
+              <span className="">
+                <FaGithub className="w-[30px] h-[30px] mr-4 my-auto" />
+              </span>
+              <span className="font-semibold text-white">{currentUser?.["link"]}</span>
             </p>
-            <div className="flex gap-4 p-2">
-              <div>
-              <Dropdown label="Tags" dismissOnClick={false}>
-                {(userTags[0] !== "Frontend" && userTags[1] !== "Frontend") ? (
-                  <Dropdown.Item
-                  className="bg-white"
-                  onClick={() => {
-                    addTag("Frontend");
+
+            <div className="flex gap-4 p-2 border-none">
+              <div className="pl-4">
+                <Dropdown label="Tags" dismissOnClick={false}
+                  style=
+                  {{
+                    backgroundColor: 'blue',
+                    borderWidth: '0px',
+                    outline: 'none',
+                    fontWeight: 'bold'
                   }}
-                >
-                  Frontend
-                </Dropdown.Item>
-                ):null}
-                {(userTags[1] !== "Backend" && userTags[0] !== "Backend") ? (
-                  <Dropdown.Item
-                  className="bg-white"
-                  onClick={() => {
-                    addTag("Backend");
-                  }}
-                >
-                  Backend
-                </Dropdown.Item>
-                ):null}
-                {(userTags[0] !== "Blockchain" && userTags[1] !== "Blockchain") ? (
-                  <Dropdown.Item
-                  className="bg-white"
-                  onClick={() => {
-                    addTag("Blockchain");
-                  }}
-                >
-                 Blockchain
-                </Dropdown.Item>
-                ):null}
-                {(userTags[0] !== "Full Stack" && (userTags[1] !== "Full Stack")) ? (
-                  <Dropdown.Item
-                  className="bg-white"
-                  onClick={() => {
-                    addTag("Full Stack");
-                  }}
-                >
-                  Full Stack
-                </Dropdown.Item>
-                ):null}
-                {(userTags[0] !== "AI & ML" && userTags[1] !== "AI & ML") ? (
-                  <Dropdown.Item
-                  className="bg-white"
-                  onClick={() => {
-                    addTag("AI & ML");
-                  }}
-                >
-                  AI & ML
-                </Dropdown.Item>
-                ):null}
-              </Dropdown>
+                  >
+                  {(userTags[0] !== "Frontend" && userTags[1] !== "Frontend") ? (
+                    <Dropdown.Item
+                      className="bg-white hover:bg-[rgb(61,74,216)] hover:text-[white]"
+                      onClick={() => {
+                        addTag("Frontend");
+                      }}
+                    >
+                      Frontend
+                    </Dropdown.Item>
+                  ) : null}
+                  {(userTags[1] !== "Backend" && userTags[0] !== "Backend") ? (
+                    <Dropdown.Item
+                      className="bg-white hover:bg-[rgb(61,74,216)] hover:text-[white]"
+                      onClick={() => {
+                        addTag("Backend");
+                      }}
+                    >
+                      Backend
+                    </Dropdown.Item>
+                  ) : null}
+                  {(userTags[0] !== "Blockchain" && userTags[1] !== "Blockchain") ? (
+                    <Dropdown.Item
+                      className="bg-white hover:bg-[rgb(61,74,216)] hover:text-[white]"
+                      onClick={() => {
+                        addTag("Blockchain");
+                      }}
+                    >
+                      Blockchain
+                    </Dropdown.Item>
+                  ) : null}
+                  {(userTags[0] !== "Full Stack" && (userTags[1] !== "Full Stack")) ? (
+                    <Dropdown.Item
+                      className="bg-white hover:bg-[rgb(61,74,216)] hover:text-[white]"
+                      onClick={() => {
+                        addTag("Full Stack");
+                      }}
+                    >
+                      Full Stack
+                    </Dropdown.Item>
+                  ) : null}
+                  {(userTags[0] !== "AI & ML" && userTags[1] !== "AI & ML") ? (
+                    <Dropdown.Item
+                      className="bg-white hover:bg-[rgb(61,74,216)] hover:text-[white]"
+                      onClick={() => {
+                        addTag("AI & ML");
+                      }}
+                    >
+                      AI & ML
+                    </Dropdown.Item>
+                  ) : null}
+                </Dropdown>
               </div>
-              <div className="flex flex-col gap-3 justify-start ">
+              <div className="flex flex-col gap-3 justify-start">
                 {userTags.map((u: any, i: any) => {
                   return (
                     <button
                       onClick={() => {
                         removeTag(u);
                       }}
-                      className="rounded bg-red-800 px-2 py-1 "
+                      className="bg-[rgb(216,4,4)] text-white font-semibold pl-3 pr-2 py-1 text-[15px] rounded-[5px]"
                     >
-                      {u} <span className="text-black text-base text-start pb-2">X</span>
+                      {u} <span className="text-black justify-center items-center mx-1 pt-1">X</span>
                     </button>
                   );
                 })}
               </div>
-             <div>
-             <button
-                disabled={isButtonDisabled}
-                onClick={() => {
-                  handleUpdateTags();
-                }}
-                className={`${
-                  isButtonDisabled ? "bg-red-900" : "bg-blue-900"
-                } border "text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium text-base rounded-lg  px-3 py-1 border-gray-600 text-center mx-4`}
-              >
-                SAVE
-              </button>
-             </div>
+              <div>
+                <button
+                  disabled={isButtonDisabled}
+                  onClick={() => {
+                    handleUpdateTags();
+                  }}
+                  className={`${isButtonDisabled ? "invisible" : "bg-[rgb(4,21,216)]"
+                    } text-white font-bold px-5  py-2 text-[15px] rounded-[5px] mr-4`}
+                >
+                  SAVE
+                </button>
+              </div>
             </div>
           </div>
         </div>
-        
-        <>
-        <p>
-        Ongoing
-        </p>
-        <div className="rounded-xl ">
-          <table className="min-w-full overflow-x-auto border-gray-600 border  mb-4 rounded-xl container">
+
+        {/* <>
+          <p>
+            Ongoing
+          </p>
+          <div className="rounded-xl ">
+            <table className="min-w-full overflow-x-auto border-gray-600 border  mb-4 rounded-xl container">
+              <thead className="uppercase bg-gray-50 dark:bg-gray-700 text-gray-100">
+                <tr>
+                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+                    Hackathon Name
+                  </th>
+                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+                    Deadline
+                  </th>
+                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+                    Link
+                  </th>
+                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+                    Description
+                  </th>
+                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+                    Apply
+                  </th>
+                </tr>
+              </thead>
+              {ongoingHackathons ? (
+                <tbody>
+                  {userHackathons?.map(
+                    (hackathon: any, index: any) =>
+                      new Date(hackathon.deadline) > new Date() && (
+                        <tr key={index}>
+                          <td className="py-2 px-3 text-sm">{hackathon.name}</td>
+                          <td className="py-2 px-3 text-sm">
+                            {convertDate(hackathon.deadline)}
+                          </td>
+                          <td className="py-2 px-3 text-sm">
+                            <a
+                              href={hackathon.link}
+                              target="_blank"
+                              className="text-blue-500"
+                            >
+                              Website
+                            </a>
+                          </td>
+                          <td className="py-2 px-3 text-sm">
+                            {hackathon.description}
+                          </td>
+                          <td className="py-2 px-3 text-sm">
+                            <button
+                              onClick={() => {
+                                router.push(`/hackathon/${hackathon._id}`);
+                              }}
+                              className="flex flex-row w-1/2 border text-center bg-red-600 rounded-xl justify-center text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium   px-2 py-1 border-gray-600  mx-4 text-xs"
+                            >
+                              Visit
+                            </button>
+                          </td>
+                        </tr>
+                      )
+                  )}
+                </tbody>
+              ) : <p className="my-4">No Ongoing hackathons</p>}
+            </table>
+          </div>
+        </> */}
+
+        <div className="">
+          <div className="block text-white text-2xl font-extrabold mt-20 ">
+            <div className="mx-auto w-[300px] text-center">Ongoing Hackathons</div>
+          </div>
+          <div className="flex flex-wrap gap-10 justify-center items-center">
+            {ongoingHackathons ? (
+              userHackathons.map((hackathon: any, index: number) => (
+                new Date(hackathon.deadline) > new Date() && (
+                <HackCard
+                  key={index}  // Don't forget to add the key prop
+                  name={hackathon.name}
+                  deadline={hackathon.deadline}
+                  link={hackathon.link}
+                  description={hackathon.description}
+                  currentUserRole={'user'}
+                  id={hackathon._id}
+                  userEmail={session?.user?.email}
+                  isActive={true}
+                  viewOnly={true}
+                />)
+              ))
+            ) : (
+              <div className="block text-white text-[20px] font-semibold">
+                <div className="mx-auto w-[310px]">No Ongoing Hackathons</div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* <>
+          <p>Closed</p>
+          <table className="min-w-full overflow-x-auto border-gray-600 border  mb-7">
             <thead className="uppercase bg-gray-50 dark:bg-gray-700 text-gray-100">
               <tr>
                 <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
@@ -297,118 +416,84 @@ const Page = () => {
                 </th>
               </tr>
             </thead>
-            {ongoingHackathons ? (
-            <tbody>
-              {userHackathons?.map(
-                (hackathon: any, index: any) =>
-                  new Date(hackathon.deadline) > new Date() && (
-                    <tr key={index}>
-                      <td className="py-2 px-3 text-sm">{hackathon.name}</td>
-                      <td className="py-2 px-3 text-sm">
-                        {convertDate(hackathon.deadline)}
-                      </td>
-                      <td className="py-2 px-3 text-sm">
-                        <a
-                          href={hackathon.link}
-                          target="_blank"
-                          className="text-blue-500"
-                        >
-                          Website
-                        </a>
-                      </td>
-                      <td className="py-2 px-3 text-sm">
-                        {hackathon.description}
-                      </td>
-                      <td className="py-2 px-3 text-sm">
-                        <button
-                          onClick={() => {
-                            router.push(`/hackathon/${hackathon._id}`);
-                          }}
-                          className="flex flex-row w-1/2 border text-center bg-red-600 rounded-xl justify-center text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium   px-2 py-1 border-gray-600  mx-4 text-xs"
-                        >
-                          Visit
-                        </button>
-                      </td>
-                    </tr>
-                  )
-              )}
-            </tbody>
-            ) : <p className="my-4">No Ongoing hackathons</p>}
+            {closedHackathons ? (
+              <tbody>
+                {userHackathons?.map(
+                  (hackathon: any, index: any) =>
+                    new Date(hackathon.deadline) < new Date() && (
+                      <tr key={index}>
+                        <td className="py-2 px-3 text-sm">{hackathon.name}</td>
+                        <td className="py-2 px-3 text-sm">
+                          {convertDate(hackathon.deadline)}
+                        </td>
+                        <td className="py-2 px-3 text-sm">
+                          <a
+                            href={hackathon.link}
+                            target="_blank"
+                            className="text-blue-500"
+                          >
+                            Website
+                          </a>
+                        </td>
+                        <td className="py-2 px-3 text-sm">
+                          {hackathon.description}
+                        </td>
+                        <td className="py-2 px-3 text-sm">
+                          <button
+                            onClick={() => {
+                              router.push(`/hackathon/${hackathon._id}`);
+                            }}
+                            className="flex flex-row w-1/2 border text-center bg-red-600 rounded-xl justify-center text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium   px-2 py-1 border-gray-600  mx-4 text-xs"
+                          >
+                            Visit
+                          </button>
+                        </td>
+                      </tr>
+                    )
+                )}
+              </tbody>
+            ) : <p className="my-4">No Closed hackathons</p>}
           </table>
-        </div>
-        </>
-        
-       
-        <>
-        <p>Closed</p>
-        <table className="min-w-full overflow-x-auto border-gray-600 border  mb-7">
-          <thead className="uppercase bg-gray-50 dark:bg-gray-700 text-gray-100">
-            <tr>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
-                Hackathon Name
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
-                Deadline
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
-                Link
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
-                Description
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
-                Apply
-              </th>
-            </tr>
-          </thead>
-          {closedHackathons ? (
-          <tbody>
-            {userHackathons?.map(
-              (hackathon: any, index: any) =>
+        </> */}
+
+        <div className="">
+          <div className="block text-white text-2xl font-extrabold mt-20 ">
+            <div className="mx-auto w-[300px] text-center">Closed Hackathons</div>
+          </div>
+          <div className="flex flex-wrap gap-10 justify-center items-center">
+            {closedHackathons ? (
+              userHackathons.map((hackathon: any, index: number) => (
                 new Date(hackathon.deadline) < new Date() && (
-                  <tr key={index}>
-                    <td className="py-2 px-3 text-sm">{hackathon.name}</td>
-                    <td className="py-2 px-3 text-sm">
-                      {convertDate(hackathon.deadline)}
-                    </td>
-                    <td className="py-2 px-3 text-sm">
-                      <a
-                        href={hackathon.link}
-                        target="_blank"
-                        className="text-blue-500"
-                      >
-                        Website
-                      </a>
-                    </td>
-                    <td className="py-2 px-3 text-sm">
-                      {hackathon.description}
-                    </td>
-                    <td className="py-2 px-3 text-sm">
-                      <button
-                        onClick={() => {
-                          router.push(`/hackathon/${hackathon._id}`);
-                        }}
-                        className="flex flex-row w-1/2 border text-center bg-red-600 rounded-xl justify-center text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium   px-2 py-1 border-gray-600  mx-4 text-xs"
-                      >
-                        Visit
-                      </button>
-                    </td>
-                  </tr>
-                )
+                <HackCard
+                  key={index}  // Don't forget to add the key prop
+                  name={hackathon.name}
+                  deadline={hackathon.deadline}
+                  link={hackathon.link}
+                  description={hackathon.description}
+                  currentUserRole={'user'}
+                  id={hackathon._id}
+                  userEmail={session?.user?.email}
+                  isActive={true}
+                  viewOnly={true}
+                />)
+              ))
+            ) : (
+              <div className="block text-white text-[20px] font-semibold">
+                <div className="mx-auto w-[310px] text-center">No Ongoing Hackathons</div>
+              </div>
             )}
-          </tbody>
-          ) : <p className="my-4">No Closed hackathons</p>}
-        </table>
-        </>
-        
-        
-        <div className="flex flex-col">
-          <div className="flex flex-row">
+          </div>
+        </div>
+
+
+        <div className="flex flex-col mt-20">
+          <div className="block text-white text-[30px] font-semibold mb-5 mx-2">Repositories</div>
+          <div className="flex flex-row ">
             {Array.from({ length: pages }, (_, index) => index + 1).map(
               (i, id) => {
                 return (
                   <button
-                    className="mx-4  border border-gray-600 px-2 rounded mb-2"
+                    className="mx-2 border border-gray-600 py-1 px-4 rounded mb-2 text-[15px] hover:border-none hover:bg-[rgb(4,21,216)]"
                     onClick={() => {
                       setRepoNumber(id + 1);
                     }}
@@ -419,9 +504,9 @@ const Page = () => {
               }
             )}
           </div>
-          <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3  grid-rows-3 lg:gap-8 gap-4 ">
+          <div className="mt-8 grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3  grid-rows-3 lg:gap-8 gap-4 ">
             {repoShown.map((repo, i) => (
-              <div className="border rounded-md px-2 py-2">
+              <div className="rounded-md p-5 hover:bg-[rgb(10,1,31)] hover:translate-y-[-10px] transition duration-500">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center">
                     <span className="text-blue-500 font-semibold text-sm">
@@ -430,7 +515,7 @@ const Page = () => {
                   </div>
                   <a
                     href={(repo as any)?.html_url}
-                    className="flex flex-row border text-center bg-red-600 rounded-xl justify-center text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium   px-3 py-2 border-gray-600  mx-4 text-xs"
+                    className="flex flex-row text-center bg-red-600 rounded-xl justify-center text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:outline-none font-medium px-5 py-3 border-gray-600 mx-4 text-xs"
                     target="_blank"
                     rel="noopener noreferrer"
                   >

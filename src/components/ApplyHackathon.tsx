@@ -24,7 +24,7 @@ const ApplyHackathon = ({ id, userEmail }: any) => {
       onClick={() => {
         addUsertoHackathon();
       }}
-      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mx-4"
+      className="bg-[rgb(4,21,216)] text-white font-bold px-10 py-3 text-[15px] rounded-[5px] mr-1"
     >
       Apply
     </button>

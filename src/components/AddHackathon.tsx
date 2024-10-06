@@ -29,7 +29,7 @@ const AddHackathon = () => {
           },
           body: JSON.stringify({ deadline, name, link, description }),
         });
-  
+
         if (res.ok) {
           router.push("/");
         } else {
@@ -42,12 +42,11 @@ const AddHackathon = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto m-4 p-6 bg-gray-100 rounded-md text-black">
-      <h2 className="text-2xl mb-4">Create a Hackathon</h2>
-      <p className="text-red-500 py-2 text-sm">{error}</p>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="block text-gray-700">Deadline:</label>
+    <>
+      <div className="form-container-hack mx-auto mt-10">
+        <form className="form" onSubmit={handleSubmit}>
+          <span className="heading">Create a hackathon</span>
+          <label className="input-hack">Deadline:</label>
           <input
             type="date"
             name="deadline"
@@ -55,11 +54,8 @@ const AddHackathon = () => {
             onChange={(e: any) => {
               setDeadline(e.target.value);
             }}
-            className="border border-gray-300 rounded-md p-2 w-full"
+            className="input-hack"
           />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Link:</label>
           <input
             type="text"
             name="link"
@@ -67,11 +63,9 @@ const AddHackathon = () => {
             onChange={(e: any) => {
               setLink(e.target.value);
             }}
-            className="border border-gray-300 rounded-md p-2 w-full"
+            placeholder="Link"
+            className="input-hack"
           />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Name:</label>
           <input
             type="text"
             name="name"
@@ -79,28 +73,35 @@ const AddHackathon = () => {
             onChange={(e: any) => {
               setName(e.target.value);
             }}
-            className="border border-gray-300 rounded-md p-2 w-full"
+            placeholder="Name of the Hackathon"
+            className="input-hack"
           />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Description:</label>
           <textarea
             name="description"
             value={description}
             onChange={(e: any) => {
               setDescription(e.target.value);
             }}
-            className="border border-gray-300 rounded-md p-2 w-full h-20"
+            className="textarea"
+            placeholder="Description"
           />
-        </div>
-        <button
-          type="submit"
-          className="bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600"
-        >
-          Create Hackathon
-        </button>
-      </form>
-    </div>
+          <div className="button-container">
+            <button type="submit" className="send-button">Create</button>
+            <div className="reset-button-container">
+              <div id="reset-btn" className="reset-button"
+              onClick={()=>{
+                setDescription("")
+                setLink("")
+                setName("")
+                setDeadline("")
+              }}
+              >Reset</div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+    </>
   );
 };
 

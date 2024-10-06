@@ -15,7 +15,7 @@ const getCurrentUser = async (email: any) => {
     console.log(res);
     return res.json();
   } catch (error) {
-    console.log("Error loading hackathons: ", error);
+    console.log("Error loading hackathons: ", error); 
   }
 };
 
