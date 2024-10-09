@@ -8,12 +8,14 @@ import ApplyHackathon from "@/components/ApplyHackathon";
 import Link from "next/link";
 import ViewHackathon from "@/components/ViewHackathon";
 import HackCard from "@/components/HackCard";
+import axios from "axios";
 
 const getCurrentUser = async (email: string) => {
   try {
-    const res = await fetch(`/api/getCurrentUser?userEmail=${email}`);
-    if (!res.ok) throw new Error("Failed to fetch current user");
-    return res.json();
+    const res = await axios.get(`/api/getCurrentUser`, {
+      params: { userEmail: email }
+    });
+    return res.data;
   } catch (error) {
     console.log("Error fetching user:", error);
     return null;
@@ -22,9 +24,8 @@ const getCurrentUser = async (email: string) => {
 
 const getData = async () => {
   try {
-    const res = await fetch("/api/getHackathon");
-    if (!res.ok) throw new Error("Failed to fetch hackathons");
-    return res.json();
+    const res = await axios.get("/api/getHackathon");
+    return res.data;
   } catch (error) {
     console.log("Error fetching hackathons:", error);
     return null;
